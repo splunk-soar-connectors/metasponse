@@ -23,6 +23,8 @@ class JobControl(BaseAction):
     """Class to handle job control action."""
 
     def execute(self):
+        """Execute job control action."""
+
         job_name = self._param["job_name"]
         action = self._param.get("action")
 

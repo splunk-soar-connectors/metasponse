@@ -13,24 +13,16 @@
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
 
-from __future__ import print_function, unicode_literals
-
 import json
+from importlib import import_module
 
 # Phantom App imports
 import phantom.app as phantom
-# Usage of the consts file is recommended
 import requests
 from phantom.base_connector import BaseConnector
 
-from actions.metasponse_create_job import CreateJob
-from actions.metasponse_get_all_jobs import GetAllJobs
-from actions.metasponse_get_job_status import JobStatus
-from actions.metasponse_job_control import JobControl
-from actions.metasponse_kill_job import KillJob
-from actions.metasponse_list_plugins import ListPlugins
-from actions.metasponse_run_job import RunJob
-from actions.metasponse_test_connectivity import TestConnectivityAction
+import metasponse_consts as consts
+from actions import BaseAction
 from metasponse_utils import MetasponseUtils
 
 
@@ -52,83 +44,21 @@ class MetasponseConnector(BaseConnector):
         self.config = None
         self.header = None
 
-    def _handle_test_connectivity(self, param):
-        """Create a test connectivity object and executes the action."""
-        self.debug_print("In action handle for", self.get_action_identifier())
-
-        action = TestConnectivityAction(self, param)
-        return action.execute()
-
-    def _handle_create_job(self, param):
-        """Create a create job object and executes the action."""
-        self.debug_print("In action handle for", self.get_action_identifier())
-
-        action = CreateJob(self, param)
-        return action.execute()
-
-    def _handle_get_all_jobs(self, param):
-        """Create a get all jobs object and executes the action."""
-        self.debug_print("In action handle for", self.get_action_identifier())
-
-        action = GetAllJobs(self, param)
-        return action.execute()
-
-    def _handle_run_job(self, param):
-        """Create a run job object and executes the action."""
-        self.debug_print("In action handle for", self.get_action_identifier())
-
-        action = RunJob(self, param)
-        return action.execute()
-
-    def _handle_job_control(self, param):
-        """Create a job control object and executes the action."""
-        self.debug_print("In action handle for", self.get_action_identifier())
-
-        action = JobControl(self, param)
-        return action.execute()
-
-    def _handle_get_job_status(self, param):
-        """Create a job status object and executes the action."""
-
-        self.debug_print("In action handle for", self.get_action_identifier())
-
-        action = JobStatus(self, param)
-        return action.execute()
-
-    def _handle_kill_job(self, param):
-        """Create a kill job object and executes the action."""
-
-        self.debug_print("In action handle for", self.get_action_identifier())
-
-        action = KillJob(self, param)
-        return action.execute()
-
-    def _handle_list_plugins(self, param):
-        """Create a list plugins object and executes the action."""
-
-        self.debug_print("In action handle for", self.get_action_identifier())
-
-        action = ListPlugins(self, param)
-        return action.execute()
-
     def handle_action(self, param):
-
+        """Handle the flow of execution, calls the appropriate method for the action."""
         # Get the action that we are supposed to execute for this App Run
         action_id = self.get_action_identifier()
-
         self.debug_print("action_id", self.get_action_identifier())
-        actions = {
-            "test_connectivity": self._handle_test_connectivity,
-            "get_all_jobs": self._handle_get_all_jobs,
-            "run_job": self._handle_run_job,
-            "job_control": self._handle_job_control,
-            "get_job_status": self._handle_get_job_status,
-            "kill_job": self._handle_kill_job,
-            "create_job": self._handle_create_job,
-            "list_plugins": self._handle_list_plugins
-        }
-        if action_id in actions:
-            return actions[action_id](param)
+
+        action_name = f"actions.metasponse_{action_id}"
+        import_module(action_name, package="actions")
+
+        base_action_sub_classes = BaseAction.__subclasses__()
+        self.debug_print(f"Finding action module: {action_name}")
+        for action_class in base_action_sub_classes:
+            if action_class.__module__ == action_name:
+                action = action_class(self, param)
+                return action.execute()
 
         self.debug_print("Action not implemented")
         return phantom.APP_ERROR
@@ -179,7 +109,7 @@ def main():  # pragma: no cover
             login_url = MetasponseConnector._get_phantom_base_url() + '/login'
 
             print("Accessing the Login page")
-            r = requests.get(login_url, verify=verify)
+            r = requests.get(login_url, verify=verify, timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT)
             csrftoken = r.cookies['csrftoken']
 
             data = dict()
@@ -192,7 +122,7 @@ def main():  # pragma: no cover
             headers['Referer'] = login_url
 
             print("Logging into Platform to get the session id")
-            r2 = requests.post(login_url, verify=verify, data=data, headers=headers)
+            r2 = requests.post(login_url, verify=verify, data=data, headers=headers, timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT)
             session_id = r2.cookies['sessionid']
         except Exception as e:
             print("Unable to get session id from the platform. Error: " + str(e))

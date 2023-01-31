@@ -23,6 +23,8 @@ class KillJob(BaseAction):
     """Class to handle kill job action."""
 
     def execute(self):
+        """Execute kill job action."""
+
         job_name = self._param["job_name"]
 
         endpoint = consts.METASPONSE_KILL_JOB.format(job_name=job_name)

@@ -23,6 +23,8 @@ class GetAllJobs(BaseAction):
     """Class to handle get all jobs status action."""
 
     def execute(self):
+        """Execute get all jobs action."""
+
         ret_val, response = self._connector.util._make_rest_call(consts.METASPONSE_GET_ALL_JOBS, self._action_result, headers={})
         if phantom.is_fail(ret_val):
             self._connector.save_progress(consts.METASPONSE_ERROR_TEST_CONNECTIVITY)

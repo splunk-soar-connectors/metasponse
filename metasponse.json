@@ -1081,8 +1081,8 @@
                     "order": 2
                 },
                 "delta": {
-                    "description": "Schedules builder using relative time",
-                    "data_type": "string",
+                    "description": "Schedules a builder using relative time",
+                    "data_type": "numeric",
                     "order": 1
                 }
             },

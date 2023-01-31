@@ -46,11 +46,8 @@ class TestValidateIntegerMethod(unittest.TestCase):
         return super().setUp()
 
     @parameterized.expand([
-        ["zero_allowed", "0", 0, ""],
-        ["integer", "10", 10.0, ""],
-        ["float1", "10.244", 10.244, ""],
-        ["float2", "0.0", 0.0, ""],
-        ["float3", "0023.023", 23.023, ""]
+        ["zero_allowed", 0, 0, ""],
+        ["integer", 10, 10.0, ""],
     ])
     def test_validate_integer_pass(self, _, input_value, expected_value, expected_message):
         """Test the valid cases for the validate integer method."""
@@ -62,8 +59,9 @@ class TestValidateIntegerMethod(unittest.TestCase):
 
     @parameterized.expand([
         ["zero_not_allowed", "0", "Please provide a non-zero positive integer value in the 'delta' parameter"],
-        ["alphanumeric", "abc12", "Please provide a valid value in the 'delta' parameter"],
-        ["unicode", "ト日本標準時ﬗ╬⎋⅍ⅎ€", "Please provide a valid value in the 'delta' parameter"],
+        ["alphanumeric", "abc12", "Please provide a valid integer value in the 'delta' parameter"],
+        ["unicode", "ト日本標準時ﬗ╬⎋⅍ⅎ€", "Please provide a valid integer value in the 'delta' parameter"],
+        ["float", "10.5", "Please provide a valid integer value in the 'delta' parameter"]
     ])
     def test_validate_integer_fail(self, _, input_value, expected_message):
         """Test the failed cases for the validate integer method."""
@@ -178,10 +176,8 @@ class TestProcessJsonResponse(unittest.TestCase):
         """Test the pass and fail cases of process json response method."""
         self.response.status_code = mock_code
         if "invalid_json_response" in name:
-            self.util._get_token = False
             self.response.json.side_effect = mock_response
         else:
-            self.util._get_token = False
             self.response.json.return_value = mock_response
         status, value = self.util._process_json_response(self.response, self.action_result)
         self.assertEqual(status, expected_status)

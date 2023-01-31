@@ -23,6 +23,12 @@ class CreateJob(BaseAction):
     """Class to handle create job action."""
 
     def __init__(self, connector, param):
+        """Prepare constructor define all job params.
+
+        :param connector: Vision connector object
+        :param param: Parameter dictionary
+        """
+
         super().__init__(connector, param)
         self.job_name = None
         self.plugins = None
@@ -130,6 +136,8 @@ class CreateJob(BaseAction):
         return phantom.APP_SUCCESS
 
     def execute(self):
+        """Execute the create job action."""
+
         # initialize all job params
         if phantom.is_fail(self.initialize_params()):
             return self._action_result.get_status()

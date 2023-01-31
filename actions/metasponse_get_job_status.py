@@ -23,8 +23,9 @@ class JobStatus(BaseAction):
     """Class to handle get job status action."""
 
     def execute(self):
-        job_name = self._param["job_name"]
+        """Execute get job status action."""
 
+        job_name = self._param["job_name"]
         params = {
             "allow_stale": True
         }

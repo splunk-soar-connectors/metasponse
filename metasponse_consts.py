@@ -14,6 +14,7 @@
 # and limitations under the License.
 
 METASPONSE_ERROR_ZERO_INT_PARAM = "Please provide a non-zero positive integer value in the '{key}' parameter"
+METASPONSE_ERROR_INVALID_INT_PARAM = "Please provide a valid integer value in the '{key}' parameter"
 METASPONSE_ERROR_INVALID_ACTION_PARAM = "Please provide a valid value in the '{key}' parameter"
 
 # endpoints

@@ -46,14 +46,15 @@ class MetasponseUtils(object):
             :returns: phantom.APP_SUCCESS/phantom.APP_ERROR and parameter value itself.
         """
         try:
-            parameter = float(parameter)
-        except Exception:
-            return action_result.set_status(phantom.APP_ERROR,
-                                            consts.METASPONSE_ERROR_INVALID_ACTION_PARAM.format(key=key)), None
+            if not float(parameter).is_integer():
+                return action_result.set_status(phantom.APP_ERROR, consts.METASPONSE_ERROR_INVALID_INT_PARAM.format(key=key)), None
 
-        if not allow_zero and parameter == 0.0:
-            return action_result.set_status(phantom.APP_ERROR,
-                                            consts.METASPONSE_ERROR_ZERO_INT_PARAM.format(key=key)), None
+            parameter = int(parameter)
+        except Exception:
+            return action_result.set_status(phantom.APP_ERROR, consts.METASPONSE_ERROR_INVALID_INT_PARAM.format(key=key)), None
+
+        if not allow_zero and parameter == 0:
+            return action_result.set_status(phantom.APP_ERROR, consts.METASPONSE_ERROR_ZERO_INT_PARAM.format(key=key)), None
 
         return phantom.APP_SUCCESS, parameter
 
@@ -141,7 +142,7 @@ class MetasponseUtils(object):
             r.text.replace(u'{', '{{').replace(u'}', '}}')
         )
 
-        return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
+        return RetVal(action_result.set_status(phantom.APP_ERROR, message))
 
     def _process_response(self, r, action_result):
         # store the r_text in debug data, it will get dumped in the logs if the action fails
@@ -208,7 +209,6 @@ class MetasponseUtils(object):
     def _validate_json_object(self, action_result, params):
         try:
             options_dict = json.loads(params.get("job_options"))
-            print(options_dict)
             if not isinstance(options_dict, dict):
                 return action_result.set_status(phantom.APP_ERROR,
                                                       consts.METASPONSE_ERROR_JSON_PARSE.format("job_options")), None
