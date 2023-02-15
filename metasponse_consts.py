@@ -16,12 +16,13 @@
 METASPONSE_ERROR_ZERO_INT_PARAM = "Please provide a non-zero positive integer value in the '{key}' parameter"
 METASPONSE_ERROR_INVALID_INT_PARAM = "Please provide a valid integer value in the '{key}' parameter"
 METASPONSE_ERROR_INVALID_ACTION_PARAM = "Please provide a valid value in the '{key}' parameter"
+METASPONSE_EMPTY_RESPONSE_STATUS_CODES = [200, 204]
 
 # endpoints
 METASPONSE_BUILDER_ENDPOINT = "/api/v1/builders/{builder_id}"
 METASPONSE_CREATE_JOB = "/api/v1/builders.json"
 METASPONSE_GET_ALL_JOBS = "/api/v1/jobs.json"
-METASPONSE_RUN_JOB = f'{METASPONSE_BUILDER_ENDPOINT}{".json"}'
+METASPONSE_RUN_JOB = "/api/v1/builders/{builder_id}.json"
 METASPONSE_PICK_UP_JOB_GET_JOB_STATUS = "/api/v1/jobs/{job_name}/status.json"
 METASPONSE_KILL_JOB = "/api/v1/jobs/{job_name}.json"
 METASPONSE_ADD_PLUGIN = "/plugins.json"
@@ -43,5 +44,6 @@ METASPONSE_ERROR_JSON_PARSE = "Unable to parse JSON for \'{}\' parameter"
 METASPONSE_JOB_CREATED_MESSAGE = "Job has been created successfully you can run your job using provided builder id"
 METASPONSE_ERROR_GENERAL_MESSAGE = "Status code: {0}, Data from server: {1}"
 METASPONSE_ERROR_HTML_RESPONSE = "Error parsing html response"
+METASPONSE_JOB_STATUS_ERROR_MESSAGE = "Job not found or job is not currently executing"
 
 METASPONSE_REQUEST_DEFAULT_TIMEOUT = 30

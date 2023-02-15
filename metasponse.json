@@ -10,7 +10,7 @@
     "python_version": "3",
     "product_version_regex": ".*",
     "publisher": "Splunk",
-    "license": "Copyright (c) Splunk, 2022",
+    "license": "Copyright (c) Splunk, 2023 Inc.",
     "app_version": "1.0.0",
     "utctime_updated": "2022-12-28T06:15:40.514827Z",
     "package_name": "phantom_metasponse",
@@ -40,7 +40,6 @@
             "action": "test connectivity",
             "identifier": "test_connectivity",
             "description": "Validate the asset configuration for connectivity using supplied configuration",
-            "verbose": "",
             "type": "test",
             "read_only": true,
             "parameters": {},
@@ -73,7 +72,7 @@
                 "job_options": {
                     "description": "Json string key-value pairs with options and it's value",
                     "data_type": "string",
-                    "required": false,
+                    "required": true,
                     "order": 2
                 }
             },
@@ -173,7 +172,7 @@
             "action": "get all jobs",
             "identifier": "get_all_jobs",
             "description": "Get information about all jobs",
-            "type": "investigation",
+            "type": "investigate",
             "read_only": true,
             "parameters": {},
             "output": [
@@ -1178,13 +1177,14 @@
                     "order": 0
                 },
                 "action": {
-                    "description": "action to perform on job",
+                    "description": "Action to perform on job",
                     "data_type": "string",
                     "required": true,
                     "value_list": [
                         "pickup",
                         "abort"
-                    ]
+                    ],
+                    "order": 1
                 }
             },
             "output": [
@@ -1212,7 +1212,7 @@
                     "contains": [
                         "metasponse job name"
                     ],
-                    "column_name": "Job Name",
+                    "column_name": "Job name",
                     "column_order": 0,
                     "example_values": [
                         "test-job"
@@ -1259,7 +1259,7 @@
             "action": "get job status",
             "identifier": "get_job_status",
             "description": "Get job status with all job properties",
-            "type": "investigation",
+            "type": "investigate",
             "read_only": true,
             "parameters": {
                 "job_name": {
@@ -2142,7 +2142,7 @@
             "action": "list plugins",
             "identifier": "list_plugins",
             "description": "Get information about all plugins",
-            "type": "investigation",
+            "type": "investigate",
             "read_only": true,
             "parameters": {},
             "output": [

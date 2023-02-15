@@ -1,4 +1,4 @@
-# File: config.py
+# File: metasponse_config.py
 #
 # Copyright (c) 2023 Splunk Inc.
 #

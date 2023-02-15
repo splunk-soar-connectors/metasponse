@@ -19,7 +19,7 @@ from unittest.mock import patch
 
 import metasponse_consts as consts
 from metasponse_connector import MetasponseConnector
-from tests import config
+from tests import metasponse_config
 
 
 @patch("metasponse_utils.requests.get")
@@ -29,7 +29,7 @@ class TestConnectivityAction(unittest.TestCase):
     def setUp(self):
 
         self.connector = MetasponseConnector()
-        self.test_json = dict(config.TEST_JSON)
+        self.test_json = dict(metasponse_config.TEST_JSON)
         self.test_json.update({"action": "test connectivity", "identifier": "test_connectivity"})
 
         return super().setUp()
@@ -42,7 +42,7 @@ class TestConnectivityAction(unittest.TestCase):
         """
 
         mock_get.return_value.status_code = 200
-        mock_get.return_value.headers = config.DEFAULT_HEADERS
+        mock_get.return_value.headers = metasponse_config.DEFAULT_HEADERS
         mock_get.return_value.json.return_value = {
             "iv": "dummy_iv",
             "_id": "dummy_id",

@@ -19,7 +19,7 @@ from unittest.mock import patch
 
 import metasponse_consts as consts
 from metasponse_connector import MetasponseConnector
-from tests import config
+from tests import metasponse_config
 
 
 @patch("metasponse_utils.requests.post")
@@ -29,7 +29,7 @@ class RunJobAction(unittest.TestCase):
     def setUp(self):
 
         self.connector = MetasponseConnector()
-        self.test_json = dict(config.TEST_JSON)
+        self.test_json = dict(metasponse_config.TEST_JSON)
         self.test_json.update({"action": "run job", "identifier": "run_job"})
         self.run_job_endpoint = consts.METASPONSE_RUN_JOB.format(builder_id="xxx-xxxx-xx-xxx-xx")
 
@@ -48,7 +48,7 @@ class RunJobAction(unittest.TestCase):
         }]
 
         mock_post.return_value.status_code = 200
-        mock_post.return_value.headers = config.DEFAULT_HEADERS
+        mock_post.return_value.headers = metasponse_config.DEFAULT_HEADERS
         mock_post.return_value.json.return_value = {}
 
         req_data = {
@@ -83,7 +83,7 @@ class RunJobAction(unittest.TestCase):
         }]
 
         mock_post.return_value.status_code = 200
-        mock_post.return_value.headers = config.DEFAULT_HEADERS
+        mock_post.return_value.headers = metasponse_config.DEFAULT_HEADERS
         mock_post.return_value.json.return_value = {}
 
         req_data = {
@@ -119,7 +119,7 @@ class RunJobAction(unittest.TestCase):
         }]
 
         mock_post.return_value.status_code = 200
-        mock_post.return_value.headers = config.DEFAULT_HEADERS
+        mock_post.return_value.headers = metasponse_config.DEFAULT_HEADERS
         mock_post.return_value.json.return_value = {}
 
         req_data = {
@@ -157,7 +157,7 @@ class RunJobAction(unittest.TestCase):
         }
 
         mock_post.return_value.status_code = 404
-        mock_post.return_value.headers = config.DEFAULT_HEADERS
+        mock_post.return_value.headers = metasponse_config.DEFAULT_HEADERS
         mock_post.return_value.json.return_value = {"error": "builder not found"}
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)

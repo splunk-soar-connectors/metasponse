@@ -34,7 +34,7 @@ class JobStatus(BaseAction):
 
         ret_val, response = self._connector.util._make_rest_call(endpoint, self._action_result, params=params, headers={})
         if phantom.is_fail(ret_val):
-            return self._action_result.get_status()
+            return self._action_result.set_status(phantom.APP_ERROR, consts.METASPONSE_JOB_STATUS_ERROR_MESSAGE)
 
         self._action_result.add_data(response)
         return self._action_result.set_status(phantom.APP_SUCCESS, consts.METASPONSE_JOB_STATUS_MESSAGE)

@@ -17,10 +17,13 @@ and limitations under the License.
   <body>
     <h3>Steps to create your job</h3>
     <ol>
-      <li>Add your Job name</li>
-      <li>Add required plugins, you can check all available plugins by running <b>list plugins</b> action</li>
-      <li>Add options which are required for given plugins. i.e <b>job.rhost</b> required option id for any job and for <b>ais.transports.ssh</b> plugin <b>ssh.user</b>, <b>ssh.password</b> is required option ids, you can check all options from list plugins action</li>
-      <li>Run the action</li>
+      <li>Add your Job name.</li>
+      <li>Add required plugins, you can check all available plugins by running <b>list plugins</b> action.</li>
+      <li>For given plugins in job plugin parameter there must be some required options available that we have to provide in job options parameter<br>
+        i.e <b>job.rhost</b> option is required option for creating any job, you need to provide your remote host value in job options.<br>
+        for <b>ais.transports.ssh</b> plugin <b>ssh.user</b>, <b>ssh.password</b> is required option ids, you can check all options from list plugins action.
+      </li>
+      <li>After adding the required options, Run the action.</li>
     </ol>
   </body>
 </html>

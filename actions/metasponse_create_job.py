@@ -44,10 +44,10 @@ class CreateJob(BaseAction):
         if not self.plugins:
             return self._action_result.set_status(phantom.APP_ERROR, consts.METASPONSE_ERROR_INVALID_ACTION_PARAM.format(key="job_plugins"))
 
-        if self._param.get("job_options"):
-            ret_val, self.job_options_dict = self._connector.util._validate_json_object(self._action_result, self._param)
-            if phantom.is_fail(ret_val):
-                return self._action_result.get_status()
+        ret_val, self.job_options_dict = self._connector.util.\
+            _validate_json_object(self._action_result, self._param["job_options"], "job_options")
+        if phantom.is_fail(ret_val):
+            return self._action_result.get_status()
 
         return phantom.APP_SUCCESS
 

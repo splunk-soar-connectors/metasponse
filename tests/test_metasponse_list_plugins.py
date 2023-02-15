@@ -19,7 +19,7 @@ from unittest.mock import patch
 
 import metasponse_consts as consts
 from metasponse_connector import MetasponseConnector
-from tests import config
+from tests import metasponse_config
 
 
 @patch("metasponse_utils.requests.get")
@@ -29,7 +29,7 @@ class GetAllJobsAction(unittest.TestCase):
     def setUp(self):
 
         self.connector = MetasponseConnector()
-        self.test_json = dict(config.TEST_JSON)
+        self.test_json = dict(metasponse_config.TEST_JSON)
         self.test_json.update({"action": "list plugins", "identifier": "list_plugins"})
 
         return super().setUp()
@@ -41,7 +41,7 @@ class GetAllJobsAction(unittest.TestCase):
         Patch the get() to return all plugins.
         """
         mock_get.return_value.status_code = 200
-        mock_get.return_value.headers = config.DEFAULT_HEADERS
+        mock_get.return_value.headers = metasponse_config.DEFAULT_HEADERS
         mock_get.return_value.json.return_value = [{"plugins": "list_of_plugins"}]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -65,7 +65,7 @@ class GetAllJobsAction(unittest.TestCase):
         Patch the get() to return all plugins.
         """
         mock_get.return_value.status_code = 500
-        mock_get.return_value.headers = config.DEFAULT_HEADERS
+        mock_get.return_value.headers = metasponse_config.DEFAULT_HEADERS
         mock_get.return_value.json.return_value = {"error": "Internal Server Error"}
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)

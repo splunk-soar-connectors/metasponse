@@ -19,7 +19,7 @@ from unittest.mock import patch
 
 import metasponse_consts as consts
 from metasponse_connector import MetasponseConnector
-from tests import config
+from tests import metasponse_config
 
 
 @patch("metasponse_utils.requests.delete")
@@ -29,7 +29,7 @@ class GetJobStatusAction(unittest.TestCase):
     def setUp(self):
 
         self.connector = MetasponseConnector()
-        self.test_json = dict(config.TEST_JSON)
+        self.test_json = dict(metasponse_config.TEST_JSON)
         self.test_json.update({"action": "kill job", "identifier": "kill_job"})
 
         return super().setUp()
@@ -46,7 +46,7 @@ class GetJobStatusAction(unittest.TestCase):
         }]
 
         mock_delete.return_value.status_code = 200
-        mock_delete.return_value.headers = config.DEFAULT_HEADERS
+        mock_delete.return_value.headers = metasponse_config.DEFAULT_HEADERS
         mock_delete.return_value.json.return_value = {}
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -76,7 +76,7 @@ class GetJobStatusAction(unittest.TestCase):
         }]
 
         mock_delete.return_value.status_code = 404
-        mock_delete.return_value.headers = config.DEFAULT_HEADERS
+        mock_delete.return_value.headers = metasponse_config.DEFAULT_HEADERS
         mock_delete.return_value.json.return_value = [{"error": "job not found"}]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)

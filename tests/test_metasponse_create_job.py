@@ -21,7 +21,7 @@ from requests import Response
 
 import metasponse_consts as consts
 from metasponse_connector import MetasponseConnector
-from tests import config
+from tests import metasponse_config
 
 
 @patch("metasponse_utils.requests.delete")
@@ -33,7 +33,7 @@ class CreateJobAction(unittest.TestCase):
     def setUp(self):
 
         self.connector = MetasponseConnector()
-        self.test_json = dict(config.TEST_JSON)
+        self.test_json = dict(metasponse_config.TEST_JSON)
         self.test_json.update({"action": "create job", "identifier": "create_job"})
 
         self.builder_endpoint = consts.METASPONSE_BUILDER_ENDPOINT.format(builder_id="xxx-xx-xxx-xxx")
@@ -45,27 +45,27 @@ class CreateJobAction(unittest.TestCase):
 
         self.create_job_response_valid = Response()
         self.create_job_response_valid.status_code = 200
-        self.create_job_response_valid.headers = config.DEFAULT_HEADERS
+        self.create_job_response_valid.headers = metasponse_config.DEFAULT_HEADERS
         self.create_job_response_valid._content = b'{"builder_id": "xxx-xx-xxx-xxx", "error": null}'
 
         self.name_job_response_valid = Response()
         self.name_job_response_valid.status_code = 200
-        self.name_job_response_valid.headers = config.DEFAULT_HEADERS
+        self.name_job_response_valid.headers = metasponse_config.DEFAULT_HEADERS
         self.name_job_response_valid._content = b'{}'
 
         self.add_plugins_response_valid = Response()
         self.add_plugins_response_valid.status_code = 200
-        self.add_plugins_response_valid.headers = config.DEFAULT_HEADERS
+        self.add_plugins_response_valid.headers = metasponse_config.DEFAULT_HEADERS
         self.add_plugins_response_valid._content = b'{"new_options": [{"dummy_options":"dummy_values"}], ' \
                                                    b'"update_values": "dummy_values", "optional_errors": []}'
 
         self.add_options_response_valid = Response()
         self.add_options_response_valid.status_code = 200
-        self.add_options_response_valid.headers = config.DEFAULT_HEADERS
+        self.add_options_response_valid.headers = metasponse_config.DEFAULT_HEADERS
         self.add_options_response_valid._content = b'{"data": "dummy_data", "validation_errors":[]}'
 
         self.delete_builder_response = Response()
-        self.delete_builder_response.headers = config.DEFAULT_HEADERS
+        self.delete_builder_response.headers = metasponse_config.DEFAULT_HEADERS
         self.delete_builder_response._content = b'{}'
         self.delete_builder_response.status_code = 200
 
@@ -87,7 +87,7 @@ class CreateJobAction(unittest.TestCase):
 
         get_job_status_response = Response()
         get_job_status_response.status_code = 200
-        get_job_status_response.headers = config.DEFAULT_HEADERS
+        get_job_status_response.headers = metasponse_config.DEFAULT_HEADERS
         get_job_status_response._content = b'{"data": "job_dummy_data", "is_ready": true, "plugin_order":["plugin1"]}'
 
         mock_post.side_effect = [self.create_job_response_valid, self.name_job_response_valid,
@@ -133,7 +133,7 @@ class CreateJobAction(unittest.TestCase):
 
         create_job_response = Response()
         create_job_response.status_code = 200
-        create_job_response.headers = config.DEFAULT_HEADERS
+        create_job_response.headers = metasponse_config.DEFAULT_HEADERS
         create_job_response._content = b'{"error": "builder not found"}'
 
         mock_post.side_effect = [create_job_response]
@@ -169,7 +169,7 @@ class CreateJobAction(unittest.TestCase):
 
         name_job_response = Response()
         name_job_response.status_code = 400
-        name_job_response.headers = config.DEFAULT_HEADERS
+        name_job_response.headers = metasponse_config.DEFAULT_HEADERS
         name_job_response._content = b'{"is_name_unique": false, "error": "Job name is not unique.Choose a unique name."}'
 
         mock_post.side_effect = [self.create_job_response_valid, name_job_response]
@@ -213,7 +213,7 @@ class CreateJobAction(unittest.TestCase):
 
         add_plugins_response = Response()
         add_plugins_response.status_code = 404
-        add_plugins_response.headers = config.DEFAULT_HEADERS
+        add_plugins_response.headers = metasponse_config.DEFAULT_HEADERS
         add_plugins_response._content = b'{"error": "plugin not found"}'
 
         mock_post.side_effect = [self.create_job_response_valid, self.name_job_response_valid, add_plugins_response]
@@ -257,7 +257,7 @@ class CreateJobAction(unittest.TestCase):
 
         add_options_response = Response()
         add_options_response.status_code = 404
-        add_options_response.headers = config.DEFAULT_HEADERS
+        add_options_response.headers = metasponse_config.DEFAULT_HEADERS
         add_options_response._content = b'{"error": "option not found"}'
 
         mock_post.side_effect = [self.create_job_response_valid, self.name_job_response_valid,
@@ -320,7 +320,7 @@ class CreateJobAction(unittest.TestCase):
 
         add_options_response = Response()
         add_options_response.status_code = 200
-        add_options_response.headers = config.DEFAULT_HEADERS
+        add_options_response.headers = metasponse_config.DEFAULT_HEADERS
         add_options_response._content = b'{"data": "dummy_data", "validation_errors":["missing required option value"]}'
 
         mock_post.side_effect = [self.create_job_response_valid, self.name_job_response_valid,
@@ -364,7 +364,7 @@ class CreateJobAction(unittest.TestCase):
 
         get_job_status_response = Response()
         get_job_status_response.status_code = 200
-        get_job_status_response.headers = config.DEFAULT_HEADERS
+        get_job_status_response.headers = metasponse_config.DEFAULT_HEADERS
         get_job_status_response._content = b'{"data": "job_dummy_data", "is_ready": false, "plugin_order":["plugin1"], ' \
                                            b'"error_msg": "Job check job failed check!:List of Errors: op_2: ' \
                                            b'value is required when op_1 is specified"}'
@@ -419,7 +419,7 @@ class CreateJobAction(unittest.TestCase):
 
         get_job_status_response = Response()
         get_job_status_response.status_code = 404
-        get_job_status_response.headers = config.DEFAULT_HEADERS
+        get_job_status_response.headers = metasponse_config.DEFAULT_HEADERS
         get_job_status_response._content = b'{"error": "builder not found"}'
 
         mock_post.side_effect = [self.create_job_response_valid, self.name_job_response_valid,

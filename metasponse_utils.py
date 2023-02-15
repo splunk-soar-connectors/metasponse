@@ -86,7 +86,7 @@ class MetasponseUtils(object):
         return error_text
 
     def _process_empty_response(self, response, action_result):
-        if response.status_code in [200, 204]:
+        if response.status_code in consts.METASPONSE_EMPTY_RESPONSE_STATUS_CODES:
             return RetVal(phantom.APP_SUCCESS, {})
 
         return RetVal(
@@ -206,13 +206,13 @@ class MetasponseUtils(object):
 
         return self._process_response(r, action_result)
 
-    def _validate_json_object(self, action_result, params):
+    def _validate_json_object(self, action_result, value, key):
         try:
-            options_dict = json.loads(params.get("job_options"))
+            options_dict = json.loads(value)
             if not isinstance(options_dict, dict):
                 return action_result.set_status(phantom.APP_ERROR,
-                                                      consts.METASPONSE_ERROR_JSON_PARSE.format("job_options")), None
+                                                      consts.METASPONSE_ERROR_JSON_PARSE.format(key)), None
         except Exception:
-            return action_result.set_status(phantom.APP_ERROR, consts.METASPONSE_ERROR_JSON_PARSE.format("job_options")), None
+            return action_result.set_status(phantom.APP_ERROR, consts.METASPONSE_ERROR_JSON_PARSE.format(key)), None
 
         return phantom.APP_SUCCESS, options_dict
