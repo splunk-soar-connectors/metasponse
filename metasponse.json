@@ -10,7 +10,7 @@
     "python_version": "3",
     "product_version_regex": ".*",
     "publisher": "Splunk",
-    "license": "Copyright (c) Splunk, 2023 Inc.",
+    "license": "Copyright (c) 2023 Splunk Inc.",
     "app_version": "1.0.0",
     "utctime_updated": "2022-12-28T06:15:40.514827Z",
     "package_name": "phantom_metasponse",
