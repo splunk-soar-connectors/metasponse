@@ -18,7 +18,7 @@
     "min_phantom_version": "5.4.0",
     "fips_compliant": false,
     "latest_tested_versions": [
-        "On Prem v1.6.4.0"
+        "On Prem v1.6.4.0, December 23, 2022"
     ],
     "app_wizard_version": "1.0.0",
     "configuration": {
@@ -64,13 +64,13 @@
                     "order": 0
                 },
                 "job_plugins": {
-                    "description": "Comma separeted plugin values",
+                    "description": "Comma-separated plugin values",
                     "data_type": "string",
                     "required": true,
                     "order": 1
                 },
                 "job_options": {
-                    "description": "Json string key-value pairs with options and it's value",
+                    "description": "Json string key-value pairs containing options and their values",
                     "data_type": "string",
                     "required": true,
                     "order": 2
@@ -1059,7 +1059,7 @@
         {
             "action": "run job",
             "identifier": "run_job",
-            "description": "Run or Schedule a job which is configured on platform",
+            "description": "Run or schedule a job which is configured on platform",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -1074,7 +1074,7 @@
                     "order": 0
                 },
                 "template": {
-                    "description": "Saves a job as a template",
+                    "description": "Save a job as a template",
                     "data_type": "boolean",
                     "default": false,
                     "order": 2
@@ -1108,10 +1108,9 @@
                 },
                 {
                     "data_path": "action_result.parameter.delta",
-                    "data_type": "string",
+                    "data_type": "numeric",
                     "example_values": [
-                        "10",
-                        "200.34"
+                        10
                     ]
                 },
                 {
@@ -1162,12 +1161,12 @@
         {
             "action": "job control",
             "identifier": "job_control",
-            "description": "Pickup/abort the job which is currently running on the platform",
+            "description": "Pickup or abort the job which is currently running on the platform",
             "type": "generic",
             "read_only": false,
             "parameters": {
                 "job_name": {
-                    "description": "Job name for pickup",
+                    "description": "Job name for pickup or abort",
                     "data_type": "string",
                     "primary": true,
                     "contains": [
@@ -2317,7 +2316,7 @@
                     "data_path": "action_result.data.*.topic",
                     "data_type": "string",
                     "example_values": [
-                        "\n    Analyze collected data against\n    [ref](Plugin/task/sync/alienvault \"synchronized Alienvault OTX pulses and indicators\") and flag\n    items that match a known IOC, such as file hash or IPv4 address.\n\n       - [ref](Plugin/collectors/autoruns \"Autoruns Collector\") - file hashes.\n       - [ref](Plugin/collectors/netstat \"Netstat Collector\") - remote IPv4 addresses.\n       - [ref](Plugin/collectors/dnscache \"DNS Cache Collector\") - IPv4 addresses and hostnames.\n       - [ref](Plugin/collectors/mutex \"Mutex Collector\") - mutex name.\n       - [ref](Plugin/collectors/hashproc \"Hash Process Collector\") - file hashes.\n       - [ref](Plugin/collectors/hashfs \"Hash Filesystem Collector\") - file hashes.\n       - [ref](Plugin/collectors/shimcache \"Shim Cache Collector\") - file hashes.\n       - [ref](Plugin/collectors/kernelmodules \"Kernel Modules Collector\") - file hashes.\n"
+                        "\n    Analyze collected data against\n    [ref](Plugin/task/sync/alienvault \"synchronized Alienvault OTX pulses and indicators\") and flag\n    items that match a known IOC, such as file hash or IPv4 address."
                     ]
                 },
                 {
