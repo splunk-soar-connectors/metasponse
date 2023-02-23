@@ -1064,7 +1064,7 @@
             "read_only": false,
             "parameters": {
                 "builder_id": {
-                    "description": "ID of the builder",
+                    "description": "ID of the job builder",
                     "data_type": "string",
                     "primary": true,
                     "contains": [
@@ -1080,7 +1080,7 @@
                     "order": 2
                 },
                 "delta": {
-                    "description": "Schedules a builder using relative time",
+                    "description": "Schedules a builder using relative time (in seconds)",
                     "data_type": "numeric",
                     "order": 1
                 }
@@ -1262,7 +1262,7 @@
             "read_only": true,
             "parameters": {
                 "job_name": {
-                    "description": "Job name for pickup",
+                    "description": "Job name for get the status",
                     "data_type": "string",
                     "primary": true,
                     "contains": [
