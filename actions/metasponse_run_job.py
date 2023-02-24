@@ -27,19 +27,19 @@ class RunJob(BaseAction):
 
         builder_id = self._param["builder_id"]
         delta = self._param.get("delta")
-        template = self._param.get("template")
+        template = self._param.get("template", False)
         body = {
             "template": template
         }
 
         if delta:
-            ret_val, delta = self._connector.util._validate_integer(self._action_result, delta, "delta", allow_zero=True)
+            ret_val, delta = self._connector.util.validate_integer(self._action_result, delta, "delta", allow_zero=True)
             if phantom.is_fail(ret_val):
                return self._action_result.get_status()
             body["delta"] = delta
 
         endpoint = consts.METASPONSE_RUN_JOB.format(builder_id=builder_id)
-        ret_val, _ = self._connector.util._make_rest_call(endpoint, self._action_result, method="post", data=body, headers={})
+        ret_val, _ = self._connector.util.make_rest_call(endpoint, self._action_result, method="post", data=body, headers={})
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 

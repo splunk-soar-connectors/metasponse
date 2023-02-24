@@ -36,7 +36,7 @@ class MetasponseUtils(object):
         self._connector = connector
 
     # Validations
-    def _validate_integer(self, action_result, parameter, key, allow_zero=False):
+    def validate_integer(self, action_result, parameter, key, allow_zero=False):
         """Checks if the provided input parameter value is valid.
 
             :param action_result: Action result or BaseConnector object
@@ -176,7 +176,7 @@ class MetasponseUtils(object):
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
-    def _make_rest_call(self, endpoint, action_result, method="get", **kwargs):
+    def make_rest_call(self, endpoint, action_result, method="get", **kwargs):
         resp_json = None
 
         try:
@@ -206,12 +206,12 @@ class MetasponseUtils(object):
 
         return self._process_response(r, action_result)
 
-    def _validate_json_object(self, action_result, value, key):
+    def validate_json_object(self, action_result, value, key):
         try:
             options_dict = json.loads(value)
             if not isinstance(options_dict, dict):
                 return action_result.set_status(phantom.APP_ERROR,
-                                                      consts.METASPONSE_ERROR_JSON_PARSE.format(key)), None
+                                                consts.METASPONSE_ERROR_JSON_PARSE.format(key)), None
         except Exception:
             return action_result.set_status(phantom.APP_ERROR, consts.METASPONSE_ERROR_JSON_PARSE.format(key)), None
 

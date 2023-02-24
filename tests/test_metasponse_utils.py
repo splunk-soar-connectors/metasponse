@@ -37,7 +37,7 @@ class TestRetValClass(unittest.TestCase):
 
 
 class TestValidateIntegerMethod(unittest.TestCase):
-    """Class to test the _validate_integer method."""
+    """Class to test the validate_integer method."""
 
     def setUp(self):
         """Set up method for the tests."""
@@ -51,7 +51,7 @@ class TestValidateIntegerMethod(unittest.TestCase):
     ])
     def test_validate_integer_pass(self, _, input_value, expected_value, expected_message):
         """Test the valid cases for the validate integer method."""
-        ret_val, output = self.util._validate_integer(self.action_result, input_value, 'delta', True)
+        ret_val, output = self.util.validate_integer(self.action_result, input_value, 'delta', True)
 
         self.assertTrue(ret_val)
         self.assertEqual(output, expected_value)
@@ -65,7 +65,7 @@ class TestValidateIntegerMethod(unittest.TestCase):
     ])
     def test_validate_integer_fail(self, _, input_value, expected_message):
         """Test the failed cases for the validate integer method."""
-        ret_val, output = self.util._validate_integer(self.action_result, input_value, 'delta', False)
+        ret_val, output = self.util.validate_integer(self.action_result, input_value, 'delta', False)
 
         self.assertFalse(ret_val)
         self.assertIsNone(output)
@@ -197,18 +197,18 @@ class TestGeneralCases(unittest.TestCase):
         return super().setUp()
 
     def test_make_rest_call_invalid_method(self):
-        """Test the _make_rest_call with invalid method."""
-        ret_val, response = self.util._make_rest_call("/endpoint", self.action_result, method="invalid_method")
+        """Test the make_rest_call with invalid method."""
+        ret_val, response = self.util.make_rest_call("/endpoint", self.action_result, method="invalid_method")
         self.assertFalse(ret_val)
         self.assertIsNone(response)
         self.assertEqual(self.action_result.get_message(), "Invalid method: invalid_method")
 
     @patch('metasponse_utils.requests.get')
     def test_make_rest_call_throw_exception(self, mock_get):
-        """Test the _make_rest_call for error case."""
+        """Test the make_rest_call for error case."""
         mock_get.side_effect = Exception('error code', 'error message')
 
-        ret_val, response = self.util._make_rest_call("/endpoint", self.action_result)
+        ret_val, response = self.util.make_rest_call("/endpoint", self.action_result)
         self.assertFalse(ret_val)
         self.assertIsNone(response)
         self.assertEqual(

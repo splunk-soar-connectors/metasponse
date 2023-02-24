@@ -37,7 +37,7 @@ class JobControl(BaseAction):
 
         endpoint = consts.METASPONSE_PICK_UP_JOB_GET_JOB_STATUS.format(job_name=job_name)
 
-        ret_val, response = self._connector.util._make_rest_call(endpoint, self._action_result, method="post", data=body, headers={})
+        ret_val, _ = self._connector.util.make_rest_call(endpoint, self._action_result, method="post", data=body, headers={})
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 

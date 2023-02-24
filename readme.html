@@ -1,5 +1,5 @@
 <!--File: readme.html
-Copyright (c) None Splunk Inc.
+Copyright (c) 2023 Splunk Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,13 +15,14 @@ and limitations under the License.
 <html>
   <head></head>
   <body>
-    <h3>Steps to create your job</h3>
+  <h3>Steps to run <b>create job</b> action</h3>
+    Parameters: <b>Job name</b>, <b>Job plugins</b>, <b>Job options</b>
     <ol>
-      <li>Add your Job name.</li>
-      <li>Add required plugins, you can check all available plugins by running <b>list plugins</b> action.</li>
-      <li>For given plugins in job plugin parameter there must be some required options available that we have to provide in job options parameter<br>
+      <li>Add Job name.</li>
+      <li>Add required plugins, check all available plugins by running <b>list plugins</b> action.</li>
+      <li>For given plugins in <b>job plugin</b> parameter there must be some required options which have to provide in <b>job options</b> parameter<br>
         i.e <b>job.rhost</b> option is required option for creating any job, you need to provide your remote host value in job options.<br>
-        for <b>ais.transports.ssh</b> plugin <b>ssh.user</b>, <b>ssh.password</b> is required option ids, you can check all options from list plugins action.
+        for <b>ais.transports.ssh</b> plugin <b>ssh.user</b>, <b>ssh.password</b> is required option ids, you can check all options from <b>list plugins</b> action.
       </li>
       <li>After adding the required options, Run the action.</li>
     </ol>

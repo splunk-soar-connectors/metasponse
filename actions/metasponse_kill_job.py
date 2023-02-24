@@ -29,7 +29,7 @@ class KillJob(BaseAction):
 
         endpoint = consts.METASPONSE_KILL_JOB.format(job_name=job_name)
 
-        ret_val, response = self._connector.util._make_rest_call(endpoint, self._action_result, method="delete", headers={})
+        ret_val, _ = self._connector.util.make_rest_call(endpoint, self._action_result, method="delete", headers={})
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 

@@ -25,7 +25,7 @@ class ListPlugins(BaseAction):
     def execute(self):
         """Execute list plugins action."""
 
-        ret_val, response = self._connector.util._make_rest_call(consts.METASPONSE_LIST_PLUGINS, self._action_result, headers={})
+        ret_val, response = self._connector.util.make_rest_call(consts.METASPONSE_LIST_PLUGINS, self._action_result, headers={})
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
