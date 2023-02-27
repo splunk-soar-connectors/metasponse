@@ -91,9 +91,8 @@ class MetasponseUtils(object):
 
         return RetVal(
             action_result.set_status(
-                phantom.APP_ERROR, "Empty response and no information in the header"
-            ), None
-        )
+                phantom.APP_ERROR, "Empty response and no information in the header,"
+                                   " Status Code: {}".format(response.status_code)), None)
 
     def _process_html_response(self, response, action_result):
         # An html response, treat it like an error
@@ -139,7 +138,7 @@ class MetasponseUtils(object):
         # You should process the error returned in the json
         message = "Error from server. Status Code: {0} Data from server: {1}".format(
             r.status_code,
-            r.text.replace(u'{', '{{').replace(u'}', '}}')
+            r.text.replace('{', '{{').replace('}', '}}')
         )
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message))
