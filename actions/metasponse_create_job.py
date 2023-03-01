@@ -52,16 +52,16 @@ class CreateJob(BaseAction):
         return phantom.APP_SUCCESS
 
     def create_job(self):
-        ret_val, resposne = self._connector.util.make_rest_call(consts.METASPONSE_CREATE_JOB, self._action_result, method="post",
+        ret_val, response = self._connector.util.make_rest_call(consts.METASPONSE_CREATE_JOB, self._action_result, method="post",
                                                                  headers={})
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
-        if resposne.get("error"):
-            self._action_result.add_data(resposne)
-            return self._action_result.set_status(phantom.APP_ERROR, resposne.get("error"))
+        if response.get("error"):
+            self._action_result.add_data(response)
+            return self._action_result.set_status(phantom.APP_ERROR, response.get("error"))
 
-        self.builder_id = resposne.get("builder_id")
+        self.builder_id = response.get("builder_id")
         self.builder_endpoint = consts.METASPONSE_BUILDER_ENDPOINT.format(builder_id=self.builder_id)
 
         # naming a job
@@ -69,7 +69,7 @@ class CreateJob(BaseAction):
             "name": self.job_name
         }
         endpoint = f"{self.builder_endpoint}{consts.METASPONSE_ADD_JOB_METADATA}"
-        ret_val, resposne = self._connector.util.make_rest_call(endpoint, self._action_result, method="post", data=body, headers={})
+        ret_val, response = self._connector.util.make_rest_call(endpoint, self._action_result, method="post", data=body, headers={})
 
         if phantom.is_fail(ret_val):
             if phantom.is_fail(self.delete_builder()):
@@ -84,7 +84,7 @@ class CreateJob(BaseAction):
             body = {
                 "plugin_id": plugin
             }
-            ret_val, resposne = self._connector.util.make_rest_call(endpoint, self._action_result, method="post", data=body,
+            ret_val, _ = self._connector.util.make_rest_call(endpoint, self._action_result, method="post", data=body,
                                                                      headers={})
             if phantom.is_fail(ret_val):
                 return self._action_result.get_status()
@@ -97,31 +97,31 @@ class CreateJob(BaseAction):
             body = {
                 "value": value
             }
-            ret_val, resposne = self._connector.util.make_rest_call(endpoint, self._action_result, method="post", data=body,
+            ret_val, response = self._connector.util.make_rest_call(endpoint, self._action_result, method="post", data=body,
                                                                      headers={})
             if phantom.is_fail(ret_val):
                 return self._action_result.get_status()
 
-            if resposne.get("validation_errors"):
-                self.resp_json["error"] = resposne.get("validation_errors")
+            if response.get("validation_errors"):
+                self.resp_json["error"] = response.get("validation_errors")
                 self._action_result.add_data(self.resp_json)
                 return self._action_result.set_status(phantom.APP_ERROR, "Error occurred for option id: {}".format(key))
         return phantom.APP_SUCCESS
 
     def check_job_status(self):
         endpoint = f"{self.builder_endpoint}{consts.METASPONSE_CHECK_JOB_STATUS}"
-        ret_val, resposne = self._connector.util.make_rest_call(endpoint, self._action_result, headers={})
+        ret_val, response = self._connector.util.make_rest_call(endpoint, self._action_result, headers={})
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
-        if not resposne.get("is_ready", False):
-            self._action_result.add_data(resposne)
+        if not response.get("is_ready", False):
+            self._action_result.add_data(response)
             return self._action_result.set_status(phantom.APP_ERROR,
-                                                  "Unable to create job, Error: {}".format(resposne.get("error_msg")))
+                                                  "Unable to create job, Error: {}".format(response.get("error_msg")))
 
         self.resp_json["builder_id"] = self.builder_id
         self.resp_json["name"] = self.job_name
-        self.resp_json["plugins"] = resposne.get("plugin_order")
+        self.resp_json["plugins"] = response.get("plugin_order")
         self.resp_json["options"] = self.job_options_dict
         self._action_result.add_data(self.resp_json)
         return phantom.APP_SUCCESS
@@ -129,7 +129,7 @@ class CreateJob(BaseAction):
     def delete_builder(self):
         endpoint = f'{consts.METASPONSE_BUILDER_ENDPOINT.format(builder_id=self.builder_id)}{".json"}'
 
-        ret_val, resposne = self._connector.util.make_rest_call(endpoint, self._action_result, method="delete", headers={})
+        ret_val, _ = self._connector.util.make_rest_call(endpoint, self._action_result, method="delete", headers={})
         if phantom.is_fail(ret_val):
             return self._action_result.get_status()
 
