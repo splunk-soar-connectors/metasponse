@@ -65,6 +65,10 @@
                 "job_plugins": {
                     "description": "Comma-separated plugin values",
                     "data_type": "string",
+                    "primary": true,
+                    "contains": [
+                        "metasponse job plugins"
+                    ],
                     "required": true,
                     "order": 1
                 },
@@ -104,6 +108,9 @@
                 {
                     "data_path": "action_result.parameter.job_plugins",
                     "data_type": "string",
+                    "contains": [
+                        "metasponse job plugins"
+                    ],
                     "example_values": [
                         "ais.transports.ssh,ais.collectors.logins"
                     ]
@@ -1064,7 +1071,7 @@
         {
             "action": "run job",
             "identifier": "run_job",
-            "description": "Run or schedule a job using builder id which is created from create job action",
+            "description": "Run or schedule a job using builder id, which is created from create job action",
             "type": "generic",
             "read_only": false,
             "parameters": {
@@ -1165,7 +1172,7 @@
         {
             "action": "job control",
             "identifier": "job_control",
-            "description": "Pickup or abort the job which is currently running on the platform",
+            "description": "Pickup or abort the job that is currently running on the platform",
             "type": "generic",
             "read_only": false,
             "parameters": {
