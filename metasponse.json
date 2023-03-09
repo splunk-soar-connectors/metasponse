@@ -2325,10 +2325,7 @@
                 },
                 {
                     "data_path": "action_result.data.*.topic",
-                    "data_type": "string",
-                    "example_values": [
-                        "\n    Analyze collected data against\n    [ref](Plugin/task/sync/alienvault \"synchronized Alienvault OTX pulses and indicators\") and flag\n    items that match a known IOC, such as file hash or IPv4 address."
-                    ]
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.type",

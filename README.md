@@ -79,7 +79,7 @@ Read only: **False**
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **job\_name** |  required  | Job name for creation | string |  `metasponse job name` 
-**job\_plugins** |  required  | Comma\-separated plugin values | string | 
+**job\_plugins** |  required  | Comma\-separated plugin values | string |  `metasponse job plugins` 
 **job\_options** |  required  | Json string key\-value pairs containing options and their values | string | 
 
 #### Action Output
@@ -88,7 +88,7 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action\_result\.status | string |  |   success  failed 
 action\_result\.parameter\.job\_name | string |  `metasponse job name`  |   test\-job 
 action\_result\.parameter\.job\_options | string |  |   \{ "ssh\.user"\:"testuser", "ssh\.password"\:"testpass", "job\.rhost"\:"8\.8\.8\.8" \} 
-action\_result\.parameter\.job\_plugins | string |  |   ais\.transports\.ssh,ais\.collectors\.logins 
+action\_result\.parameter\.job\_plugins | string |  `metasponse job plugins`  |   ais\.transports\.ssh,ais\.collectors\.logins 
 action\_result\.data\.\*\.builder\_id | string |  `metasponse job builder id`  |   r4ed5295\-d95c\-4gae\-896r5\-895594c3c66f 
 action\_result\.data\.\*\.name | string |  `metasponse job name`  |   test\-job 
 action\_result\.data\.\*\.options | string |  |  
@@ -464,10 +464,7 @@ action\_result\.data\.\*\.options\.\*\.type | string |  |   str
 action\_result\.data\.\*\.path | string |  |   analyzers/alienvault 
 action\_result\.data\.\*\.requires\_escalation | boolean |  |   True  False 
 action\_result\.data\.\*\.task | boolean |  |   True  False 
-action\_result\.data\.\*\.topic | string |  |   
-    Analyze collected data against
-    \[ref\]\(Plugin/task/sync/alienvault "synchronized Alienvault OTX pulses and indicators"\) and flag
-    items that match a known IOC, such as file hash or IPv4 address\. 
+action\_result\.data\.\*\.topic | string |  |  
 action\_result\.data\.\*\.type | string |  |   analyzer 
 action\_result\.data\.\*\.version | string |  |   1\.0\.0 
 action\_result\.summary | string |  |  
