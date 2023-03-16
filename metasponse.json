@@ -49,6 +49,7 @@
             "action": "create job",
             "identifier": "create_job",
             "description": "Create a job with provided plugins and options",
+            "verbose": "For job options, use the following format in \"job_options\" parameter<br>{ \"ssh.user\":\"testuser\", \"ssh.password\":\"testpass\", \"job.rhost\":\"8.8.8.8\" }.",
             "type": "generic",
             "read_only": false,
             "parameters": {
