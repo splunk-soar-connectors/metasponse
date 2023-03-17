@@ -38,16 +38,16 @@ class TestConnectivityAction(unittest.TestCase):
         """
         Test the valid case for the test connectivity action.
 
-        Patch the get() to return all jobs.
+        Patch the get() to return all plugins.
         """
 
         mock_get.return_value.status_code = 200
         mock_get.return_value.headers = metasponse_config.DEFAULT_HEADERS
         mock_get.return_value.json.return_value = {
-            "iv": "dummy_iv",
-            "_id": "dummy_id",
-            "name": "dummy_job",
-            "state": "completed"
+            "id": "plugin_id",
+            "name": "plugin_name",
+            "path": "plugin_path",
+            "type": "plugin_type"
         }
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -58,7 +58,7 @@ class TestConnectivityAction(unittest.TestCase):
         self.assertEqual(ret_val['status'], 'success')
 
         mock_get.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{consts.METASPONSE_GET_ALL_JOBS}',
+            f'{self.test_json["config"]["base_url"]}{consts.METASPONSE_LIST_PLUGINS}',
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
             headers={}
@@ -68,7 +68,7 @@ class TestConnectivityAction(unittest.TestCase):
         """
         Test the invalid case for the test connectivity action.
 
-        Patch the get() to return all jobs.
+        Patch the get() to return all plugins.
         """
         mock_get.side_effect = Exception("Connection timeout")
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
@@ -78,7 +78,7 @@ class TestConnectivityAction(unittest.TestCase):
         self.assertEqual(ret_val['status'], 'failed')
 
         mock_get.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{consts.METASPONSE_GET_ALL_JOBS}',
+            f'{self.test_json["config"]["base_url"]}{consts.METASPONSE_LIST_PLUGINS}',
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
             headers={}
