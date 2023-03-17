@@ -1,0 +1,2445 @@
+{
+    "appid": "e6d648b5-e80e-4d07-854c-26556cc23b33",
+    "name": "Metasponse",
+    "description": "Connects to Metasponse platform using Metasponse API services",
+    "type": "endpoint",
+    "product_vendor": "AIS",
+    "logo": "logo_metasponse.svg",
+    "logo_dark": "logo_metasponse_dark.svg",
+    "product_name": "Metasponse",
+    "python_version": "3",
+    "product_version_regex": ".*",
+    "publisher": "Splunk",
+    "license": "Copyright (c) 2023 Splunk Inc.",
+    "app_version": "1.0.0",
+    "utctime_updated": "2022-12-28T06:15:40.514827Z",
+    "package_name": "phantom_metasponse",
+    "main_module": "metasponse_connector.py",
+    "min_phantom_version": "5.5.0",
+    "fips_compliant": true,
+    "latest_tested_versions": [
+        "On Prem v1.6.4.0, January 10, 2023"
+    ],
+    "app_wizard_version": "1.0.0",
+    "configuration": {
+        "base_url": {
+            "description": "Base URL (example: https://myip:5003)",
+            "data_type": "string",
+            "required": true,
+            "order": 0
+        },
+        "verify_server_cert": {
+            "description": "Verify server certificate",
+            "data_type": "boolean",
+            "order": 1
+        }
+    },
+    "actions": [
+        {
+            "action": "test connectivity",
+            "identifier": "test_connectivity",
+            "description": "Validate the asset configuration for connectivity using supplied configuration",
+            "type": "test",
+            "read_only": true,
+            "parameters": {},
+            "output": [],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "create job",
+            "identifier": "create_job",
+            "description": "Create a job with provided plugins and options",
+            "verbose": "For job options, use the following format in \"job_options\" parameter<br>{ \"ssh.user\":\"testuser\", \"ssh.password\":\"testpass\", \"job.rhost\":\"8.8.8.8\" }.",
+            "type": "generic",
+            "read_only": false,
+            "parameters": {
+                "job_name": {
+                    "description": "Job name for creation",
+                    "data_type": "string",
+                    "primary": true,
+                    "contains": [
+                        "metasponse job name"
+                    ],
+                    "required": true,
+                    "order": 0
+                },
+                "job_plugins": {
+                    "description": "Comma-separated plugin values",
+                    "data_type": "string",
+                    "primary": true,
+                    "contains": [
+                        "metasponse job plugins"
+                    ],
+                    "required": true,
+                    "order": 1
+                },
+                "job_options": {
+                    "description": "Json string key-value pairs containing options and their values",
+                    "data_type": "string",
+                    "required": true,
+                    "order": 2
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.job_name",
+                    "data_type": "string",
+                    "contains": [
+                        "metasponse job name"
+                    ],
+                    "example_values": [
+                        "test-job"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.job_options",
+                    "data_type": "string",
+                    "example_values": [
+                        "{ \"ssh.user\":\"testuser\", \"ssh.password\":\"testpass\", \"job.rhost\":\"8.8.8.8\" }"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.job_plugins",
+                    "data_type": "string",
+                    "contains": [
+                        "metasponse job plugins"
+                    ],
+                    "example_values": [
+                        "ais.transports.ssh,ais.collectors.logins"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.builder_id",
+                    "data_type": "string",
+                    "column_name": "Builder ID",
+                    "column_order": 1,
+                    "contains": [
+                        "metasponse job builder id"
+                    ],
+                    "example_values": [
+                        "r4ed5295-d95c-4gae-896r5-895594c3c66f"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "Job Name",
+                    "column_order": 0,
+                    "contains": [
+                        "metasponse job name"
+                    ],
+                    "example_values": [
+                        "test-job"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.options",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.plugins",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Job has been created successfully, Use the builder id for run the job"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "width": 12,
+                "type": "table",
+                "height": 5
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get all jobs",
+            "identifier": "get_all_jobs",
+            "description": "Get information of all deployed jobs",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {},
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*._id",
+                    "data_type": "string",
+                    "example_values": [
+                        "83b51c76g691721e60d234vf"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.completion_token",
+                    "data_type": "string",
+                    "example_values": [
+                        "c52240a5-26w1-4rf1-9f40-3q44f4395zrf05"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.host_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.iv",
+                    "data_type": "string",
+                    "example_values": [
+                        "Ge2FF1UOmbaF4LzIt6XPxN=="
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.last_update",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1672814551.536
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.analysis.enabled",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.analysis.end_time",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1672843351.522606
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.analysis.has_completed",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.analysis.has_started",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.analysis.is_active",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.analysis.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0.038991
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.analysis.start_time",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1672843351.483615
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.analysis_progress",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.collection_coverage",
+                    "data_type": "numeric",
+                    "example_values": [
+                        353
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.bandwidth",
+                    "data_type": "numeric",
+                    "example_values": [
+                        45.47
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.enabled",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.end_time",
+                    "data_type": "numeric",
+                    "example_values": [
+                        168.87
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.has_completed",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.has_started",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.hosts_completed",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.hosts_requiring_pickup",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.hosts_with_errors",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.is_active",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.pushed_files.average_file_size",
+                    "data_type": "numeric",
+                    "example_values": [
+                        6236.5
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.pushed_files.file_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        4
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.pushed_files.file_size",
+                    "data_type": "numeric",
+                    "example_values": [
+                        24946
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        5.12715
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.seconds_per_host",
+                    "data_type": "numeric",
+                    "example_values": [
+                        5.12715
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.start_time",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1672842483.748148
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.targets.alive",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.targets.dead",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.targets.duplicate",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.targets.excluded",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.targets.total",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment_etc",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment_progress",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.end_time",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1672843351.522606
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.expect_collections.*.collection_name",
+                    "data_type": "string",
+                    "example_values": [
+                        "logins"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.expect_collections.*.count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.has_completed",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.has_started",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.is_active",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.bandwidth",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.data_files.average_file_size",
+                    "data_type": "numeric",
+                    "example_values": [
+                        134
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.data_files.file_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.data_files.file_size",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1434
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.enabled",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.end_time",
+                    "data_type": "numeric",
+                    "example_values": [
+                        163.034
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.has_completed",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.has_started",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.hosts_completed",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.hosts_with_errors",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.is_active",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        91.17933
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.seconds_per_host",
+                    "data_type": "numeric",
+                    "example_values": [
+                        90.17937
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.start_time",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1672842542.908834
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.targets.alive",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.targets.dead",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.targets.duplicate",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.targets.excluded",
+                    "data_type": "numeric",
+                    "example_values": [
+                        4
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.targets.total",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup_etc",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup_progress",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.analysis.failure.average_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.analysis.failure.count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.analysis.failure.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.analysis.success.average_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0.001114133333325255
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.analysis.success.count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.analysis.success.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0.003342399999975765
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.analysis.total_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.analysis.total_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0.003342399999975765
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.average_file_size",
+                    "data_type": "numeric",
+                    "example_values": [
+                        21808
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.failure.average_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.failure.count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.failure.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.file_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.file_size",
+                    "data_type": "numeric",
+                    "example_values": [
+                        21808
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.success.average_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0.005666000000000171
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.success.count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.success.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0.005666000000000171
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.total_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.total_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0.005666000000000171
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.pickup.average_file_size",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.pickup.errors",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.pickup.file_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.pickup.file_size",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.pickup.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.plugin_id",
+                    "data_type": "string",
+                    "example_values": [
+                        "ais.collectors.logins"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.plugin_version",
+                    "data_type": "string",
+                    "example_values": [
+                        "1.5.0"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.task.failure.average_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.task.failure.count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.task.failure.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.task.success.average_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.task.success.count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.task.success.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.task.total_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.task.total_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.progress",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0.041986
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.start_time",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1672843351.48062
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.target_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "Job Name",
+                    "column_order": 0,
+                    "contains": [
+                        "metasponse job name"
+                    ],
+                    "example_values": [
+                        "test_job"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.operator.id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.operator.login",
+                    "data_type": "string",
+                    "example_values": [
+                        "APP\\Administrator"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.operator.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "Administrator"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.options.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "plugins.debug"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.options.*.salt",
+                    "data_type": "string",
+                    "example_values": [
+                        "LqLewPp9Lkea3IKrkw9fvf4=="
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.options.*.secure",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.options.*.value",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.parent_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.plugins.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "ais.collectors.logins"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.plugins.*.version",
+                    "data_type": "string",
+                    "example_values": [
+                        "1.5.0"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.schedule_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.start_token",
+                    "data_type": "string",
+                    "example_values": [
+                        "e1202445fb3-8fsa-4re6-b7d0-8dcn73654b"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.state",
+                    "data_type": "string",
+                    "example_values": [
+                        "completed",
+                        "await-pickup",
+                        "scheduled"
+                    ],
+                    "column_name": "State",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.task",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.template",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.version",
+                    "data_type": "string",
+                    "example_values": [
+                        "1.6.4.0"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Total job: 9"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "width": 12,
+                "type": "table",
+                "height": 5
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "run job",
+            "identifier": "run_job",
+            "description": "Run or schedule a job using builder id, which is created from create job action",
+            "type": "generic",
+            "read_only": false,
+            "parameters": {
+                "builder_id": {
+                    "description": "Job builder ID",
+                    "data_type": "string",
+                    "primary": true,
+                    "contains": [
+                        "metasponse job builder id"
+                    ],
+                    "required": true,
+                    "order": 0
+                },
+                "template": {
+                    "description": "Save a job as a template",
+                    "data_type": "boolean",
+                    "order": 2
+                },
+                "delta": {
+                    "description": "Schedules a builder using relative time (in seconds)",
+                    "data_type": "numeric",
+                    "order": 1
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.builder_id",
+                    "data_type": "string",
+                    "contains": [
+                        "metasponse job builder id"
+                    ],
+                    "example_values": [
+                        "r4ed5295-d95c-4gae-896r5-895594c3c66f"
+                    ],
+                    "column_name": "Builder ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.delta",
+                    "data_type": "numeric",
+                    "example_values": [
+                        10
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.template",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Job has been scheduled/deployed successfully"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "width": 12,
+                "type": "table",
+                "height": 5
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "job control",
+            "identifier": "job_control",
+            "description": "Pickup or abort the job that is currently running on the platform",
+            "type": "generic",
+            "read_only": false,
+            "parameters": {
+                "job_name": {
+                    "description": "Job name for pickup or abort",
+                    "data_type": "string",
+                    "primary": true,
+                    "contains": [
+                        "metasponse job name"
+                    ],
+                    "required": true,
+                    "order": 0
+                },
+                "action": {
+                    "description": "Action to perform on job",
+                    "data_type": "string",
+                    "required": true,
+                    "value_list": [
+                        "pickup",
+                        "abort"
+                    ],
+                    "order": 1
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.action",
+                    "data_type": "string",
+                    "column_name": "Action",
+                    "column_order": 1,
+                    "example_values": [
+                        "pickup",
+                        "abort"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.job_name",
+                    "data_type": "string",
+                    "contains": [
+                        "metasponse job name"
+                    ],
+                    "column_name": "Job name",
+                    "column_order": 0,
+                    "example_values": [
+                        "test-job"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Action pickup has been applied on job successfully"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "width": 12,
+                "type": "table",
+                "height": 5
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get job status",
+            "identifier": "get_job_status",
+            "description": "Get job status with all job properties",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "job_name": {
+                    "description": "Job name for get the status",
+                    "data_type": "string",
+                    "primary": true,
+                    "contains": [
+                        "metasponse job name"
+                    ],
+                    "required": true,
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.job_name",
+                    "data_type": "string",
+                    "contains": [
+                        "metasponse job name"
+                    ],
+                    "example_values": [
+                        "test-job"
+                    ],
+                    "column_name": "Job Name",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.analysis.enabled",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.analysis.end_time",
+                    "data_type": "numeric",
+                    "example_values": [
+                        23424.23
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.analysis.has_completed",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.analysis.has_started",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.analysis.is_active",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.analysis.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        43
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.analysis.start_time",
+                    "data_type": "numeric",
+                    "example_values": [
+                        223.4
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.analysis_progress",
+                    "data_type": "numeric",
+                    "example_values": [
+                        23
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.collection_coverage",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.bandwidth",
+                    "data_type": "numeric",
+                    "example_values": [
+                        34.22
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.enabled",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.end_time",
+                    "data_type": "numeric",
+                    "example_values": [
+                        34.43
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.has_completed",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.has_started",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.hosts_completed",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.hosts_requiring_pickup",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.hosts_with_errors",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.is_active",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.pushed_files.average_file_size",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1231
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.pushed_files.file_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2323
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.pushed_files.file_size",
+                    "data_type": "numeric",
+                    "example_values": [
+                        223
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        4324.243
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.seconds_per_host",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.start_time",
+                    "data_type": "numeric",
+                    "example_values": [
+                        23.42
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.targets.alive",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.targets.dead",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.targets.duplicate",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.targets.excluded",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment.targets.total",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment_etc",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3434
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.deployment_progress",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.end_time",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1673447475.244199
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.expect_collections.*.collection_name",
+                    "data_type": "string",
+                    "example_values": [
+                        "logins"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.expect_collections.*.count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.has_completed",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.has_started",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.is_active",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.bandwidth",
+                    "data_type": "numeric",
+                    "example_values": [
+                        24
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.data_files.average_file_size",
+                    "data_type": "numeric",
+                    "example_values": [
+                        234
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.data_files.file_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        4
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.data_files.file_size",
+                    "data_type": "numeric",
+                    "example_values": [
+                        223
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.enabled",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.end_time",
+                    "data_type": "string",
+                    "example_values": [
+                        22323
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.has_completed",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.has_started",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.hosts_completed",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.hosts_with_errors",
+                    "data_type": "numeric",
+                    "example_values": [
+                        3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.is_active",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.seconds_per_host",
+                    "data_type": "numeric",
+                    "example_values": [
+                        232
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.start_time",
+                    "data_type": "string",
+                    "example_values": [
+                        2244
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.targets.alive",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.targets.dead",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.targets.duplicate",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.targets.excluded",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup.targets.total",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup_etc",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.pickup_progress",
+                    "data_type": "numeric",
+                    "example_values": [
+                        234
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.analysis.failure.average_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2345.3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.analysis.failure.count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        34
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.analysis.failure.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        234.3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.analysis.success.average_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        234.3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.analysis.success.count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.analysis.success.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        34.32
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.analysis.total_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        34.3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.analysis.total_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        234.3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.average_file_size",
+                    "data_type": "numeric",
+                    "example_values": [
+                        21808
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.failure.average_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        223.4
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.failure.count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.failure.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        234.2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.file_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.file_size",
+                    "data_type": "numeric",
+                    "example_values": [
+                        21808
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.success.average_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0.004861800000000027
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.success.count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.success.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0.004861800000000027
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.total_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.deployment.total_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0.004861800000000027
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.pickup.average_file_size",
+                    "data_type": "numeric",
+                    "example_values": [
+                        43
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.pickup.errors",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.pickup.file_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.pickup.file_size",
+                    "data_type": "numeric",
+                    "example_values": [
+                        244
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.pickup.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.plugin_id",
+                    "data_type": "string",
+                    "example_values": [
+                        "ais.collectors.logins"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.plugin_version",
+                    "data_type": "string",
+                    "example_values": [
+                        "1.5.0"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.task.failure.average_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        5
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.task.failure.count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.task.failure.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        4
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.task.success.average_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        24.5
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.task.success.count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        5
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.task.success.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        234.3
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.task.total_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        234.23
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.plugin_metrics.*.task.total_runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2434.4
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.progress",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.runtime",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2324
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.start_time",
+                    "data_type": "numeric",
+                    "example_values": [
+                        223.23
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.metrics.target_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.pickup_only",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.pid",
+                    "data_type": "string",
+                    "example_values": [
+                        "2345"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.state",
+                    "data_type": "string",
+                    "example_values": [
+                        "completed",
+                        "await-pickup",
+                        "scheduled",
+                        "aborted"
+                    ],
+                    "column_name": "State",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.target_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.wakeup_time",
+                    "data_type": "numeric",
+                    "example_values": [
+                        223.23
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.worker_count",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Get the job status successfully"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "width": 12,
+                "type": "table",
+                "height": 5
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "kill job",
+            "identifier": "kill_job",
+            "description": "Delete a job which is configured on platform",
+            "type": "generic",
+            "read_only": false,
+            "parameters": {
+                "job_name": {
+                    "description": "Job name for delete",
+                    "data_type": "string",
+                    "primary": true,
+                    "contains": [
+                        "metasponse job name"
+                    ],
+                    "required": true,
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.job_name",
+                    "data_type": "string",
+                    "contains": [
+                        "metasponse job name"
+                    ],
+                    "example_values": [
+                        "test-job"
+                    ],
+                    "column_name": "Job Name",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Job has been deleted successfully"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "width": 12,
+                "type": "table",
+                "height": 5
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "list plugins",
+            "identifier": "list_plugins",
+            "description": "Get information about all plugins",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {},
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.altitude",
+                    "data_type": "numeric",
+                    "example_values": [
+                        10100
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.altitude_option_id",
+                    "data_type": "string",
+                    "example_values": [
+                        "altitude.analyzer.alienvault"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.author",
+                    "data_type": "string",
+                    "example_values": [
+                        "Metasponse Team"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.builtin",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "AlienValue Analyzer"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.email",
+                    "data_type": "string",
+                    "example_values": [
+                        "testurl@gmail.com"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "ais.analyzers.alienvault"
+                    ],
+                    "contains": [
+                        "metasponse job plugins"
+                    ],
+                    "column_name": "Job Plugins",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.indexes",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "AlienVault Analyzer"
+                    ],
+                    "column_name": "Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.options.*.category",
+                    "data_type": "string",
+                    "example_values": [
+                        "Plugin Reporting"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.options.*.choices",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.options.*.default",
+                    "data_type": "string",
+                    "example_values": [
+                        "~"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.options.*.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "Destination directory for Plugin reports"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.options.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "alienvault.outdir"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.options.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "Plugin: Output Directory"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.options.*.required",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.options.*.secure",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.options.*.topic",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.options.*.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "str"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.path",
+                    "data_type": "string",
+                    "example_values": [
+                        "analyzers/alienvault"
+                    ],
+                    "column_name": "Path",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.requires_escalation",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.task",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.topic",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "analyzer"
+                    ],
+                    "column_name": "Plugin Type",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.version",
+                    "data_type": "string",
+                    "example_values": [
+                        "1.0.0"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Total plugins: 9"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "width": 12,
+                "type": "table",
+                "height": 5
+            },
+            "versions": "EQ(*)"
+        }
+    ],
+    "pip_dependencies": {
+        "wheel": [
+            {
+                "module": "beautifulsoup4",
+                "input_file": "wheels/py3/beautifulsoup4-4.9.1-py3-none-any.whl"
+            },
+            {
+                "module": "certifi",
+                "input_file": "wheels/py3/certifi-2022.12.7-py3-none-any.whl"
+            },
+            {
+                "module": "chardet",
+                "input_file": "wheels/shared/chardet-3.0.4-py2.py3-none-any.whl"
+            },
+            {
+                "module": "idna",
+                "input_file": "wheels/shared/idna-2.10-py2.py3-none-any.whl"
+            },
+            {
+                "module": "requests",
+                "input_file": "wheels/shared/requests-2.25.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "soupsieve",
+                "input_file": "wheels/py3/soupsieve-2.3.2.post1-py3-none-any.whl"
+            },
+            {
+                "module": "urllib3",
+                "input_file": "wheels/shared/urllib3-1.26.14-py2.py3-none-any.whl"
+            }
+        ]
+    },
+    "pip39_dependencies": {
+        "wheel": [
+            {
+                "module": "beautifulsoup4",
+                "input_file": "wheels/py3/beautifulsoup4-4.9.1-py3-none-any.whl"
+            },
+            {
+                "module": "certifi",
+                "input_file": "wheels/py3/certifi-2022.12.7-py3-none-any.whl"
+            },
+            {
+                "module": "chardet",
+                "input_file": "wheels/shared/chardet-3.0.4-py2.py3-none-any.whl"
+            },
+            {
+                "module": "idna",
+                "input_file": "wheels/shared/idna-2.10-py2.py3-none-any.whl"
+            },
+            {
+                "module": "requests",
+                "input_file": "wheels/shared/requests-2.25.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "soupsieve",
+                "input_file": "wheels/py3/soupsieve-2.4-py3-none-any.whl"
+            },
+            {
+                "module": "urllib3",
+                "input_file": "wheels/shared/urllib3-1.26.14-py2.py3-none-any.whl"
+            }
+        ]
+    }
+}
