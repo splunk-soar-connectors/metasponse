@@ -24,6 +24,10 @@ Connects to Metasponse platform using Metasponse API services
 [comment]: # "either express or implied. See the License for the specific language governing permissions"
 [comment]: # "and limitations under the License."
 [comment]: # ""
+## Port Details
+
+App supports **5003** port by default and it can be configured.
+
 ### Steps to run **create job** action
 
 Parameters: **Job name** , **Job plugins** , **Job options**
