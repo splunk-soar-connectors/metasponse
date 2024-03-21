@@ -79,7 +79,7 @@ Create a job with provided plugins and options
 Type: **generic**  
 Read only: **False**
 
-For job options, use the following format in "job_options" parameter<br>{ "ssh.user":"testuser", "ssh.password":"testpass", "job.rhost":"8.8.8.8" }.  # pragma: allowlist secret
+For job options, use the following format in "job_options" parameter<br>{ "ssh.user":"testuser", "ssh.password":"testpass", "job.rhost":"8.8.8.8" }.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
@@ -93,7 +93,7 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string |  |   success  failed 
 action_result.parameter.job_name | string |  `metasponse job name`  |   test-job 
-action_result.parameter.job_options | string |  |   { "ssh.user":"testuser", "ssh. password":"testpass", "job.rhost":"8.8.8.8" }  # pragma: allowlist secret
+action_result.parameter.job_options | string |  |   { "ssh.user":"testuser", "ssh.password":"testpass", "job.rhost":"8.8.8.8" } 
 action_result.parameter.job_plugins | string |  `metasponse job plugins`  |   ais.transports.ssh,ais.collectors.logins 
 action_result.data.\*.builder_id | string |  `metasponse job builder id`  |   r4ed5295-d95c-4gae-896r5-895594c3c66f 
 action_result.data.\*.name | string |  `metasponse job name`  |   test-job 
