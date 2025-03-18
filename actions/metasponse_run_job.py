@@ -1,6 +1,6 @@
 # File: metasponse_run_job.py
 #
-# Copyright (c) 2023-2024 Splunk Inc.
+# Copyright (c) 2023-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,14 +28,12 @@ class RunJob(BaseAction):
         builder_id = self._param["builder_id"]
         delta = self._param.get("delta")
         template = self._param.get("template", False)
-        body = {
-            "template": template
-        }
+        body = {"template": template}
 
         if delta:
             ret_val, delta = self._connector.util.validate_integer(self._action_result, delta, "delta", allow_zero=True)
             if phantom.is_fail(ret_val):
-               return self._action_result.get_status()
+                return self._action_result.get_status()
             body["delta"] = delta
 
         endpoint = consts.METASPONSE_RUN_JOB.format(builder_id=builder_id)

@@ -1,6 +1,6 @@
 # File: metasponse_config.py
 #
-# Copyright (c) 2023-2024 Splunk Inc.
+# Copyright (c) 2023-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ TEST_JSON = {
         "appname": "-",
         "directory": "metasponse-e6d648b5-e80e-4d07-854c-26556cc23b33",
         "base_url": "https://base_url",
-        "main_module": "metasponse_connector.py"
+        "main_module": "metasponse_connector.py",
     },
     "debug_level": 3,
     "dec_key": DEFAULT_ASSET_ID,
-    "parameters": [{}]
+    "parameters": [{}],
 }

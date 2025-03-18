@@ -1,6 +1,6 @@
 # File: metasponse_utils.py
 #
-# Copyright (c) 2023-2024 Splunk Inc.
+# Copyright (c) 2023-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,12 +24,13 @@ import metasponse_consts as consts
 
 class RetVal(tuple):
     """This class returns the tuple of two elements."""
+
     def __new__(cls, val1, val2=None):
         """Creates a new tuple object."""
         return tuple.__new__(RetVal, (val1, val2))
 
 
-class MetasponseUtils(object):
+class MetasponseUtils:
     """This class holds all the util methods."""
 
     def __init__(self, connector=None):
@@ -39,11 +40,11 @@ class MetasponseUtils(object):
     def validate_integer(self, action_result, parameter, key, allow_zero=False):
         """Checks if the provided input parameter value is valid.
 
-            :param action_result: Action result or BaseConnector object
-            :param parameter: Input parameter value
-            :param key: Input parameter key
-            :param allow_zero: Zero is allowed or not (default False)
-            :returns: phantom.APP_SUCCESS/phantom.APP_ERROR and parameter value itself.
+        :param action_result: Action result or BaseConnector object
+        :param parameter: Input parameter value
+        :param key: Input parameter key
+        :param allow_zero: Zero is allowed or not (default False)
+        :returns: phantom.APP_SUCCESS/phantom.APP_ERROR and parameter value itself.
         """
         try:
             if not float(parameter).is_integer():
@@ -76,7 +77,7 @@ class MetasponseUtils(object):
                 elif len(e.args) == 1:
                     error_msg = e.args[0]
         except Exception as e:
-            self._connector.error_print(f"Error occurred while fetching exception information. Details: {str(e)}")
+            self._connector.error_print(f"Error occurred while fetching exception information. Details: {e!s}")
 
         if not error_code:
             error_text = f"Error message: {error_msg}"
@@ -90,9 +91,9 @@ class MetasponseUtils(object):
             return RetVal(phantom.APP_SUCCESS, {})
 
         return RetVal(
-            action_result.set_status(
-                phantom.APP_ERROR, "Empty response and no information in the header,"
-                                   " Status Code: {}".format(response.status_code)), None)
+            action_result.set_status(phantom.APP_ERROR, f"Empty response and no information in the header, Status Code: {response.status_code}"),
+            None,
+        )
 
     def _process_html_response(self, response, action_result):
         # An html response, treat it like an error
@@ -125,42 +126,35 @@ class MetasponseUtils(object):
         try:
             resp_json = r.json()
         except Exception as e:
-            return RetVal(
-                action_result.set_status(
-                    phantom.APP_ERROR, "Unable to parse JSON response. Error: {0}".format(str(e))
-                ), None
-            )
+            return RetVal(action_result.set_status(phantom.APP_ERROR, f"Unable to parse JSON response. Error: {e!s}"), None)
 
         # Please specify the status codes here
         if 200 <= r.status_code < 399:
             return RetVal(phantom.APP_SUCCESS, resp_json)
 
         # You should process the error returned in the json
-        message = "Error from server. Status Code: {0} Data from server: {1}".format(
-            r.status_code,
-            r.text.replace('{', '{{').replace('}', '}}')
-        )
+        message = "Error from server. Status Code: {} Data from server: {}".format(r.status_code, r.text.replace("{", "{{").replace("}", "}}"))
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message))
 
     def _process_response(self, r, action_result):
         # store the r_text in debug data, it will get dumped in the logs if the action fails
-        if hasattr(action_result, 'add_debug_data'):
-            action_result.add_debug_data({'r_status_code': r.status_code})
-            action_result.add_debug_data({'r_text': r.text})
-            action_result.add_debug_data({'r_headers': r.headers})
+        if hasattr(action_result, "add_debug_data"):
+            action_result.add_debug_data({"r_status_code": r.status_code})
+            action_result.add_debug_data({"r_text": r.text})
+            action_result.add_debug_data({"r_headers": r.headers})
 
         # Process each 'Content-Type' of response separately
 
         # Process a json response
-        if 'json' in r.headers.get('Content-Type', ''):
+        if "json" in r.headers.get("Content-Type", ""):
             return self._process_json_response(r, action_result)
 
         # Process an HTML response, Do this no matter what the api talks.
         # There is a high chance of a PROXY in between phantom and the rest of
         # world, in case of errors, PROXY's return HTML, this function parses
         # the error and adds it to the action_result.
-        if 'html' in r.headers.get('Content-Type', ''):
+        if "html" in r.headers.get("Content-Type", ""):
             return self._process_html_response(r, action_result)
 
         # it's not content-type that is to be parsed, handle an empty response
@@ -168,9 +162,8 @@ class MetasponseUtils(object):
             return self._process_empty_response(r, action_result)
 
         # everything else is actually an error at this point
-        message = "Can't process response from server. Status Code: {0} Data from server: {1}".format(
-            r.status_code,
-            r.text.replace('{', '{{').replace('}', '}}')
+        message = "Can't process response from server. Status Code: {} Data from server: {}".format(
+            r.status_code, r.text.replace("{", "{{").replace("}", "}}")
         )
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
@@ -181,27 +174,17 @@ class MetasponseUtils(object):
         try:
             request_func = getattr(requests, method)
         except AttributeError:
-            return RetVal(
-                action_result.set_status(phantom.APP_ERROR, "Invalid method: {0}".format(method)),
-                resp_json
-            )
+            return RetVal(action_result.set_status(phantom.APP_ERROR, f"Invalid method: {method}"), resp_json)
 
         # Create a URL to connect to
         url = f"{self._connector.config['base_url'].strip('/')}{endpoint}"
 
         try:
             r = request_func(
-                url,
-                timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
-                verify=self._connector.config.get("verify_server_cert", False),
-                **kwargs
+                url, timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT, verify=self._connector.config.get("verify_server_cert", False), **kwargs
             )
         except Exception as e:
-            return RetVal(
-                action_result.set_status(
-                    phantom.APP_ERROR, "Error Connecting to server. Details: {0}".format(str(e))
-                ), resp_json
-            )
+            return RetVal(action_result.set_status(phantom.APP_ERROR, f"Error Connecting to server. Details: {e!s}"), resp_json)
 
         return self._process_response(r, action_result)
 
@@ -209,8 +192,7 @@ class MetasponseUtils(object):
         try:
             options_dict = json.loads(value)
             if not isinstance(options_dict, dict):
-                return action_result.set_status(phantom.APP_ERROR,
-                                                consts.METASPONSE_ERROR_JSON_PARSE.format(key)), None
+                return action_result.set_status(phantom.APP_ERROR, consts.METASPONSE_ERROR_JSON_PARSE.format(key)), None
         except Exception:
             return action_result.set_status(phantom.APP_ERROR, consts.METASPONSE_ERROR_JSON_PARSE.format(key)), None
 

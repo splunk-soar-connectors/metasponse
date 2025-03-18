@@ -1,6 +1,6 @@
 # File: test_metasponse_job_control.py
 #
-# Copyright (c) 2023-2024 Splunk Inc.
+# Copyright (c) 2023-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ class JobControlAction(unittest.TestCase):
     """Class to test the Job Control action."""
 
     def setUp(self):
-
         self.connector = MetasponseConnector()
         self.test_json = dict(metasponse_config.TEST_JSON)
         self.test_json.update({"action": "job control", "identifier": "job_control"})
@@ -41,10 +40,7 @@ class JobControlAction(unittest.TestCase):
         Patch the post() to run job.
         """
 
-        self.test_json["parameters"] = [{
-            "job_name": "test_job",
-            "action": "pickup"
-        }]
+        self.test_json["parameters"] = [{"job_name": "test_job", "action": "pickup"}]
 
         mock_post.return_value.status_code = 200
         mock_post.return_value.headers = metasponse_config.DEFAULT_HEADERS
@@ -53,17 +49,17 @@ class JobControlAction(unittest.TestCase):
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
 
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 1)
-        self.assertEqual(ret_val['status'], 'success')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 1)
+        self.assertEqual(ret_val["status"], "success")
 
         endpoint = consts.METASPONSE_PICK_UP_JOB_GET_JOB_STATUS.format(job_name="test_job")
         mock_post.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{endpoint}',
+            f"{self.test_json['config']['base_url']}{endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
             data={"action": "pickup"},
-            headers={}
+            headers={},
         )
 
     def test_job_control_action_abort_valid(self, mock_post):
@@ -73,10 +69,7 @@ class JobControlAction(unittest.TestCase):
         Patch the post() to run job.
         """
 
-        self.test_json["parameters"] = [{
-            "job_name": "test_job",
-            "action": "abort"
-        }]
+        self.test_json["parameters"] = [{"job_name": "test_job", "action": "abort"}]
 
         mock_post.return_value.status_code = 200
         mock_post.return_value.headers = metasponse_config.DEFAULT_HEADERS
@@ -85,17 +78,17 @@ class JobControlAction(unittest.TestCase):
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
 
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 1)
-        self.assertEqual(ret_val['status'], 'success')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 1)
+        self.assertEqual(ret_val["status"], "success")
 
         endpoint = consts.METASPONSE_PICK_UP_JOB_GET_JOB_STATUS.format(job_name="test_job")
         mock_post.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{endpoint}',
+            f"{self.test_json['config']['base_url']}{endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
             data={"action": "abort"},
-            headers={}
+            headers={},
         )
 
     def test_job_control_invalid_action_value(self, mock_post):
@@ -105,17 +98,14 @@ class JobControlAction(unittest.TestCase):
         Patch the post() to run job.
         """
 
-        self.test_json["parameters"] = [{
-            "job_name": "test_job",
-            "action": "pick"
-        }]
+        self.test_json["parameters"] = [{"job_name": "test_job", "action": "pick"}]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
 
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 0)
-        self.assertEqual(ret_val['status'], 'failed')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 0)
+        self.assertEqual(ret_val["status"], "failed")
 
     def test_job_control_action_job_name_not_found(self, mock_post):
         """
@@ -124,10 +114,7 @@ class JobControlAction(unittest.TestCase):
         Patch the post() to run job.
         """
 
-        self.test_json["parameters"] = [{
-            "job_name": "test_job",
-            "action": "pickup"
-        }]
+        self.test_json["parameters"] = [{"job_name": "test_job", "action": "pickup"}]
 
         mock_post.return_value.status_code = 404
         mock_post.return_value.headers = metasponse_config.DEFAULT_HEADERS
@@ -136,15 +123,15 @@ class JobControlAction(unittest.TestCase):
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
 
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 0)
-        self.assertEqual(ret_val['status'], 'failed')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 0)
+        self.assertEqual(ret_val["status"], "failed")
 
         endpoint = consts.METASPONSE_PICK_UP_JOB_GET_JOB_STATUS.format(job_name="test_job")
         mock_post.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{endpoint}',
+            f"{self.test_json['config']['base_url']}{endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
             data={"action": "pickup"},
-            headers={}
+            headers={},
         )

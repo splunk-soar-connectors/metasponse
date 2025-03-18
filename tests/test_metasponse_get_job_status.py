@@ -1,6 +1,6 @@
 # File: test_metasponse_get_job_status.py
 #
-# Copyright (c) 2023-2024 Splunk Inc.
+# Copyright (c) 2023-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ class GetJobStatusAction(unittest.TestCase):
     """Class to test the get job status action."""
 
     def setUp(self):
-
         self.connector = MetasponseConnector()
         self.test_json = dict(metasponse_config.TEST_JSON)
         self.test_json.update({"action": "get job status", "identifier": "get_job_status"})
@@ -41,9 +40,7 @@ class GetJobStatusAction(unittest.TestCase):
         Patch the get() to return job status.
         """
 
-        self.test_json["parameters"] = [{
-            "job_name": "test_job"
-        }]
+        self.test_json["parameters"] = [{"job_name": "test_job"}]
 
         mock_get.return_value.status_code = 200
         mock_get.return_value.headers = metasponse_config.DEFAULT_HEADERS
@@ -52,17 +49,17 @@ class GetJobStatusAction(unittest.TestCase):
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
 
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 1)
-        self.assertEqual(ret_val['status'], 'success')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 1)
+        self.assertEqual(ret_val["status"], "success")
 
         endpoint = consts.METASPONSE_PICK_UP_JOB_GET_JOB_STATUS.format(job_name="test_job")
         mock_get.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{endpoint}',
+            f"{self.test_json['config']['base_url']}{endpoint}",
             headers={},
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
-            params={'allow_stale': True},
-            verify=False
+            params={"allow_stale": True},
+            verify=False,
         )
 
     def test_get_job_status_invalid(self, mock_get):
@@ -72,9 +69,7 @@ class GetJobStatusAction(unittest.TestCase):
         Patch the get() to return job status.
         """
 
-        self.test_json["parameters"] = [{
-            "job_name": "test_job"
-        }]
+        self.test_json["parameters"] = [{"job_name": "test_job"}]
 
         mock_get.return_value.status_code = 404
         mock_get.return_value.headers = metasponse_config.DEFAULT_HEADERS
@@ -83,15 +78,15 @@ class GetJobStatusAction(unittest.TestCase):
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
 
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 0)
-        self.assertEqual(ret_val['status'], 'failed')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 0)
+        self.assertEqual(ret_val["status"], "failed")
 
         endpoint = consts.METASPONSE_PICK_UP_JOB_GET_JOB_STATUS.format(job_name="test_job")
         mock_get.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{endpoint}',
+            f"{self.test_json['config']['base_url']}{endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
-            params={'allow_stale': True},
-            headers={}
+            params={"allow_stale": True},
+            headers={},
         )
