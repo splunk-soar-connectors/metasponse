@@ -1,6 +1,6 @@
 # File: metasponse_job_control.py
 #
-# Copyright (c) 2023-2024 Splunk Inc.
+# Copyright (c) 2023-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,9 +31,7 @@ class JobControl(BaseAction):
         if action not in ["pickup", "abort"]:
             return self._action_result.set_status(phantom.APP_ERROR, consts.METASPONSE_ERROR_INVALID_ACTION_PARAM.format(key="action"))
 
-        body = {
-            "action": action
-        }
+        body = {"action": action}
 
         endpoint = consts.METASPONSE_PICK_UP_JOB_GET_JOB_STATUS.format(job_name=job_name)
 

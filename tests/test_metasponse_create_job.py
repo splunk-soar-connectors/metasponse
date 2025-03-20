@@ -1,6 +1,6 @@
 # File: test_metasponse_create_job.py
 #
-# Copyright (c) 2023-2024 Splunk Inc.
+# Copyright (c) 2023-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,17 +31,16 @@ class CreateJobAction(unittest.TestCase):
     """Class to test the Creat Job action."""
 
     def setUp(self):
-
         self.connector = MetasponseConnector()
         self.test_json = dict(metasponse_config.TEST_JSON)
         self.test_json.update({"action": "create job", "identifier": "create_job"})
 
         self.builder_endpoint = consts.METASPONSE_BUILDER_ENDPOINT.format(builder_id="xxx-xx-xxx-xxx")
-        self.add_option_endpoint = f'{self.builder_endpoint}{consts.METASPONSE_ADD_OPTIONS.format(option_id="op_1")}'
-        self.get_job_status_endpoint = f'{self.builder_endpoint}{consts.METASPONSE_CHECK_JOB_STATUS}'
-        self.add_metadata_endpoint = f'{self.builder_endpoint}{consts.METASPONSE_ADD_JOB_METADATA}'
-        self.delete_builder_endpoint = f'{self.builder_endpoint}{".json"}'
-        self.add_plugins_endpoint = f'{self.builder_endpoint}{consts.METASPONSE_ADD_PLUGIN}'
+        self.add_option_endpoint = f"{self.builder_endpoint}{consts.METASPONSE_ADD_OPTIONS.format(option_id='op_1')}"
+        self.get_job_status_endpoint = f"{self.builder_endpoint}{consts.METASPONSE_CHECK_JOB_STATUS}"
+        self.add_metadata_endpoint = f"{self.builder_endpoint}{consts.METASPONSE_ADD_JOB_METADATA}"
+        self.delete_builder_endpoint = f"{self.builder_endpoint}{'.json'}"
+        self.add_plugins_endpoint = f"{self.builder_endpoint}{consts.METASPONSE_ADD_PLUGIN}"
 
         self.create_job_response_valid = Response()
         self.create_job_response_valid.status_code = 200
@@ -51,13 +50,14 @@ class CreateJobAction(unittest.TestCase):
         self.name_job_response_valid = Response()
         self.name_job_response_valid.status_code = 200
         self.name_job_response_valid.headers = metasponse_config.DEFAULT_HEADERS
-        self.name_job_response_valid._content = b'{}'
+        self.name_job_response_valid._content = b"{}"
 
         self.add_plugins_response_valid = Response()
         self.add_plugins_response_valid.status_code = 200
         self.add_plugins_response_valid.headers = metasponse_config.DEFAULT_HEADERS
-        self.add_plugins_response_valid._content = b'{"new_options": [{"dummy_options":"dummy_values"}], ' \
-                                                   b'"update_values": "dummy_values", "optional_errors": []}'
+        self.add_plugins_response_valid._content = (
+            b'{"new_options": [{"dummy_options":"dummy_values"}], "update_values": "dummy_values", "optional_errors": []}'
+        )
 
         self.add_options_response_valid = Response()
         self.add_options_response_valid.status_code = 200
@@ -66,7 +66,7 @@ class CreateJobAction(unittest.TestCase):
 
         self.delete_builder_response = Response()
         self.delete_builder_response.headers = metasponse_config.DEFAULT_HEADERS
-        self.delete_builder_response._content = b'{}'
+        self.delete_builder_response._content = b"{}"
         self.delete_builder_response.status_code = 200
 
         return super().setUp()
@@ -79,40 +79,40 @@ class CreateJobAction(unittest.TestCase):
         Patch the get() to return job status.
         """
 
-        self.test_json["parameters"] = [{
-            "job_name": "test_job",
-            "job_plugins": "plugin1",
-            "job_options": "{\"op_1\":\"val_1\"}"
-        }]
+        self.test_json["parameters"] = [{"job_name": "test_job", "job_plugins": "plugin1", "job_options": '{"op_1":"val_1"}'}]
 
         get_job_status_response = Response()
         get_job_status_response.status_code = 200
         get_job_status_response.headers = metasponse_config.DEFAULT_HEADERS
         get_job_status_response._content = b'{"data": "job_dummy_data", "is_ready": true, "plugin_order":["plugin1"]}'
 
-        mock_post.side_effect = [self.create_job_response_valid, self.name_job_response_valid,
-                                 self.add_plugins_response_valid, self.add_options_response_valid]
+        mock_post.side_effect = [
+            self.create_job_response_valid,
+            self.name_job_response_valid,
+            self.add_plugins_response_valid,
+            self.add_options_response_valid,
+        ]
         mock_get.side_effect = [get_job_status_response]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 1)
-        self.assertEqual(ret_val['status'], 'success')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 1)
+        self.assertEqual(ret_val["status"], "success")
 
         mock_post.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.add_option_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.add_option_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
             data={"value": "val_1"},
-            headers={}
+            headers={},
         )
 
         mock_get.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.get_job_status_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.get_job_status_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
-            headers={}
+            headers={},
         )
         self.assertEqual(mock_post.call_count, 4)
         self.assertEqual(mock_get.call_count, 1)
@@ -125,11 +125,7 @@ class CreateJobAction(unittest.TestCase):
         Patch the get() to return job status.
         """
 
-        self.test_json["parameters"] = [{
-            "job_name": "test_job",
-            "job_plugins": "plugin1",
-            "job_options": "{\"op_1\":\"val_1\"}"
-        }]
+        self.test_json["parameters"] = [{"job_name": "test_job", "job_plugins": "plugin1", "job_options": '{"op_1":"val_1"}'}]
 
         create_job_response = Response()
         create_job_response.status_code = 200
@@ -141,15 +137,15 @@ class CreateJobAction(unittest.TestCase):
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
 
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 0)
-        self.assertEqual(ret_val['status'], 'failed')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 0)
+        self.assertEqual(ret_val["status"], "failed")
 
         mock_post.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{consts.METASPONSE_CREATE_JOB}',
+            f"{self.test_json['config']['base_url']}{consts.METASPONSE_CREATE_JOB}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
-            headers={}
+            headers={},
         )
         self.assertEqual(mock_post.call_count, 1)
 
@@ -161,11 +157,7 @@ class CreateJobAction(unittest.TestCase):
         Patch the get() to return job status.
         """
 
-        self.test_json["parameters"] = [{
-            "job_name": "test_job",
-            "job_plugins": "plugin1",
-            "job_options": "{\"op_1\":\"val_1\"}"
-        }]
+        self.test_json["parameters"] = [{"job_name": "test_job", "job_plugins": "plugin1", "job_options": '{"op_1":"val_1"}'}]
 
         name_job_response = Response()
         name_job_response.status_code = 400
@@ -177,22 +169,22 @@ class CreateJobAction(unittest.TestCase):
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 0)
-        self.assertEqual(ret_val['status'], 'failed')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 0)
+        self.assertEqual(ret_val["status"], "failed")
 
         mock_post.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.add_metadata_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.add_metadata_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
             data={"name": "test_job"},
-            headers={}
+            headers={},
         )
         mock_delete.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.delete_builder_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.delete_builder_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
-            headers={}
+            headers={},
         )
         self.assertEqual(mock_post.call_count, 2)
         self.assertEqual(mock_delete.call_count, 1)
@@ -205,11 +197,7 @@ class CreateJobAction(unittest.TestCase):
         Patch the get() to return job status.
         """
 
-        self.test_json["parameters"] = [{
-            "job_name": "test_job",
-            "job_plugins": "plugin1",
-            "job_options": "{\"op_1\":\"val_1\"}"
-        }]
+        self.test_json["parameters"] = [{"job_name": "test_job", "job_plugins": "plugin1", "job_options": '{"op_1":"val_1"}'}]
 
         add_plugins_response = Response()
         add_plugins_response.status_code = 404
@@ -221,22 +209,22 @@ class CreateJobAction(unittest.TestCase):
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 0)
-        self.assertEqual(ret_val['status'], 'failed')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 0)
+        self.assertEqual(ret_val["status"], "failed")
 
         mock_post.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.add_plugins_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.add_plugins_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
             data={"plugin_id": "plugin1"},
-            headers={}
+            headers={},
         )
         mock_delete.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.delete_builder_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.delete_builder_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
-            headers={}
+            headers={},
         )
         self.assertEqual(mock_post.call_count, 3)
         self.assertEqual(mock_delete.call_count, 1)
@@ -249,39 +237,39 @@ class CreateJobAction(unittest.TestCase):
         Patch the get() to return job status.
         """
 
-        self.test_json["parameters"] = [{
-            "job_name": "test_job",
-            "job_plugins": "plugin1",
-            "job_options": "{\"op_1\":\"val_1\"}"
-        }]
+        self.test_json["parameters"] = [{"job_name": "test_job", "job_plugins": "plugin1", "job_options": '{"op_1":"val_1"}'}]
 
         add_options_response = Response()
         add_options_response.status_code = 404
         add_options_response.headers = metasponse_config.DEFAULT_HEADERS
         add_options_response._content = b'{"error": "option not found"}'
 
-        mock_post.side_effect = [self.create_job_response_valid, self.name_job_response_valid,
-                                 self.add_plugins_response_valid, add_options_response]
+        mock_post.side_effect = [
+            self.create_job_response_valid,
+            self.name_job_response_valid,
+            self.add_plugins_response_valid,
+            add_options_response,
+        ]
         mock_delete.side_effect = [self.delete_builder_response]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 0)
-        self.assertEqual(ret_val['status'], 'failed')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 0)
+        self.assertEqual(ret_val["status"], "failed")
 
         mock_post.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.add_option_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.add_option_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
             data={"value": "val_1"},
-            headers={}
+            headers={},
         )
         mock_delete.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.delete_builder_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.delete_builder_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
-            headers={}
+            headers={},
         )
         self.assertEqual(mock_post.call_count, 4)
         self.assertEqual(mock_delete.call_count, 1)
@@ -293,17 +281,13 @@ class CreateJobAction(unittest.TestCase):
         Patch the post() to create job, naming a job, add plugins and options.
         Patch the get() to return job status.
         """
-        self.test_json["parameters"] = [{
-            "job_name": "test_job",
-            "job_plugins": "plugin1",
-            "job_options": "invalid format"
-        }]
+        self.test_json["parameters"] = [{"job_name": "test_job", "job_plugins": "plugin1", "job_options": "invalid format"}]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 0)
-        self.assertEqual(ret_val['status'], 'failed')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 0)
+        self.assertEqual(ret_val["status"], "failed")
 
     def test_create_job_invalid_option_value_2(self, mock_get, mock_post, mock_delete):
         """
@@ -312,39 +296,39 @@ class CreateJobAction(unittest.TestCase):
         Patch the post() to create job, naming a job, add plugins and options.
         Patch the get() to return job status.
         """
-        self.test_json["parameters"] = [{
-            "job_name": "test_job",
-            "job_plugins": "plugin1",
-            "job_options": "{\"op_1\":\"\"}"
-        }]
+        self.test_json["parameters"] = [{"job_name": "test_job", "job_plugins": "plugin1", "job_options": '{"op_1":""}'}]
 
         add_options_response = Response()
         add_options_response.status_code = 200
         add_options_response.headers = metasponse_config.DEFAULT_HEADERS
         add_options_response._content = b'{"data": "dummy_data", "validation_errors":["missing required option value"]}'
 
-        mock_post.side_effect = [self.create_job_response_valid, self.name_job_response_valid,
-                                 self.add_plugins_response_valid, add_options_response]
+        mock_post.side_effect = [
+            self.create_job_response_valid,
+            self.name_job_response_valid,
+            self.add_plugins_response_valid,
+            add_options_response,
+        ]
         mock_delete.side_effect = [self.delete_builder_response]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 0)
-        self.assertEqual(ret_val['status'], 'failed')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 0)
+        self.assertEqual(ret_val["status"], "failed")
 
         mock_post.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.add_option_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.add_option_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
             data={"value": ""},
-            headers={}
+            headers={},
         )
         mock_delete.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.delete_builder_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.delete_builder_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
-            headers={}
+            headers={},
         )
         self.assertEqual(mock_post.call_count, 4)
         self.assertEqual(mock_delete.call_count, 1)
@@ -356,48 +340,50 @@ class CreateJobAction(unittest.TestCase):
         Patch the post() to create job, naming a job, add plugins and options.
         Patch the get() to return job status.
         """
-        self.test_json["parameters"] = [{
-            "job_name": "test_job",
-            "job_plugins": "plugin1",
-            "job_options": "{\"op_1\":\"val_1\"}"
-        }]
+        self.test_json["parameters"] = [{"job_name": "test_job", "job_plugins": "plugin1", "job_options": '{"op_1":"val_1"}'}]
 
         get_job_status_response = Response()
         get_job_status_response.status_code = 200
         get_job_status_response.headers = metasponse_config.DEFAULT_HEADERS
-        get_job_status_response._content = b'{"data": "job_dummy_data", "is_ready": false, "plugin_order":["plugin1"], ' \
-                                           b'"error_msg": "Job check job failed check!:List of Errors: op_2: ' \
-                                           b'value is required when op_1 is specified"}'
+        get_job_status_response._content = (
+            b'{"data": "job_dummy_data", "is_ready": false, "plugin_order":["plugin1"], '
+            b'"error_msg": "Job check job failed check!:List of Errors: op_2: '
+            b'value is required when op_1 is specified"}'
+        )
 
-        mock_post.side_effect = [self.create_job_response_valid, self.name_job_response_valid,
-                                 self.add_plugins_response_valid, self.add_options_response_valid]
+        mock_post.side_effect = [
+            self.create_job_response_valid,
+            self.name_job_response_valid,
+            self.add_plugins_response_valid,
+            self.add_options_response_valid,
+        ]
         mock_get.side_effect = [get_job_status_response]
         mock_delete.side_effect = [self.delete_builder_response]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 0)
-        self.assertEqual(ret_val['status'], 'failed')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 0)
+        self.assertEqual(ret_val["status"], "failed")
 
         mock_post.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.add_option_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.add_option_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
             data={"value": "val_1"},
-            headers={}
+            headers={},
         )
         mock_get.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.get_job_status_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.get_job_status_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
             headers={},
         )
         mock_delete.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.delete_builder_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.delete_builder_endpoint}",
             headers={},
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
-            verify=False
+            verify=False,
         )
         self.assertEqual(mock_post.call_count, 4)
         self.assertEqual(mock_get.call_count, 1)
@@ -411,46 +397,46 @@ class CreateJobAction(unittest.TestCase):
         Patch the get() to return job status.
         """
 
-        self.test_json["parameters"] = [{
-            "job_name": "test_job",
-            "job_plugins": "plugin1",
-            "job_options": "{\"op_1\":\"val_1\"}"
-        }]
+        self.test_json["parameters"] = [{"job_name": "test_job", "job_plugins": "plugin1", "job_options": '{"op_1":"val_1"}'}]
 
         get_job_status_response = Response()
         get_job_status_response.status_code = 404
         get_job_status_response.headers = metasponse_config.DEFAULT_HEADERS
         get_job_status_response._content = b'{"error": "builder not found"}'
 
-        mock_post.side_effect = [self.create_job_response_valid, self.name_job_response_valid,
-                                 self.add_plugins_response_valid, self.add_options_response_valid]
+        mock_post.side_effect = [
+            self.create_job_response_valid,
+            self.name_job_response_valid,
+            self.add_plugins_response_valid,
+            self.add_options_response_valid,
+        ]
         mock_get.side_effect = [get_job_status_response]
         mock_delete.side_effect = [self.delete_builder_response]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 0)
-        self.assertEqual(ret_val['status'], 'failed')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 0)
+        self.assertEqual(ret_val["status"], "failed")
 
         mock_post.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.add_option_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.add_option_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
             data={"value": "val_1"},
-            headers={}
+            headers={},
         )
         mock_get.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.get_job_status_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.get_job_status_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
-            headers={}
+            headers={},
         )
         mock_delete.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.delete_builder_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.delete_builder_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
-            headers={}
+            headers={},
         )
         self.assertEqual(mock_post.call_count, 4)
         self.assertEqual(mock_get.call_count, 1)

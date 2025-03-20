@@ -1,6 +1,6 @@
 # File: metasponse_get_job_status.py
 #
-# Copyright (c) 2023-2024 Splunk Inc.
+# Copyright (c) 2023-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,9 +26,7 @@ class JobStatus(BaseAction):
         """Execute get job status action."""
 
         job_name = self._param["job_name"]
-        params = {
-            "allow_stale": True
-        }
+        params = {"allow_stale": True}
 
         endpoint = consts.METASPONSE_PICK_UP_JOB_GET_JOB_STATUS.format(job_name=job_name)
 

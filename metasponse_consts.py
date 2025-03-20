@@ -1,6 +1,6 @@
 # File: metasponse_consts.py
 #
-# Copyright (c) 2023-2024 Splunk Inc.
+# Copyright (c) 2023-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ METASPONSE_JOB_TEMPLATE_MESSAGE = "Job has been saved as a template"
 METASPONSE_JOB_STATUS_MESSAGE = "Job status has been fetched successfully"
 METASPONSE_KILL_JOB_MESSAGE = "Job has been deleted successfully"
 METASPONSE_ERROR_MESSAGE_UNAVAILABLE = "Error message unavailable. Please check the asset configuration and|or action parameters"
-METASPONSE_ERROR_JSON_PARSE = "Unable to parse JSON for \'{}\' parameter"
+METASPONSE_ERROR_JSON_PARSE = "Unable to parse JSON for '{}' parameter"
 METASPONSE_JOB_CREATED_MESSAGE = "Job has been created successfully, Use the builder id for run the job"
 METASPONSE_ERROR_GENERAL_MESSAGE = "Status code: {0}, Data from server: {1}"
 METASPONSE_ERROR_HTML_RESPONSE = "Error parsing html response"

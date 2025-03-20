@@ -1,6 +1,6 @@
 # File: test_metasponse_test_connectivity.py
 #
-# Copyright (c) 2023-2024 Splunk Inc.
+# Copyright (c) 2023-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ class TestConnectivityAction(unittest.TestCase):
     """Class to test the Test Connectivity action."""
 
     def setUp(self):
-
         self.connector = MetasponseConnector()
         self.test_json = dict(metasponse_config.TEST_JSON)
         self.test_json.update({"action": "test connectivity", "identifier": "test_connectivity"})
@@ -43,25 +42,20 @@ class TestConnectivityAction(unittest.TestCase):
 
         mock_get.return_value.status_code = 200
         mock_get.return_value.headers = metasponse_config.DEFAULT_HEADERS
-        mock_get.return_value.json.return_value = {
-            "id": "plugin_id",
-            "name": "plugin_name",
-            "path": "plugin_path",
-            "type": "plugin_type"
-        }
+        mock_get.return_value.json.return_value = {"id": "plugin_id", "name": "plugin_name", "path": "plugin_path", "type": "plugin_type"}
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
 
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 1)
-        self.assertEqual(ret_val['status'], 'success')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 1)
+        self.assertEqual(ret_val["status"], "success")
 
         mock_get.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{consts.METASPONSE_LIST_PLUGINS}',
+            f"{self.test_json['config']['base_url']}{consts.METASPONSE_LIST_PLUGINS}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
-            headers={}
+            headers={},
         )
 
     def test_connectivity_invalid_base_url_fail(self, mock_get):
@@ -73,13 +67,13 @@ class TestConnectivityAction(unittest.TestCase):
         mock_get.side_effect = Exception("Connection timeout")
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 0)
-        self.assertEqual(ret_val['status'], 'failed')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 0)
+        self.assertEqual(ret_val["status"], "failed")
 
         mock_get.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{consts.METASPONSE_LIST_PLUGINS}',
+            f"{self.test_json['config']['base_url']}{consts.METASPONSE_LIST_PLUGINS}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
-            headers={}
+            headers={},
         )

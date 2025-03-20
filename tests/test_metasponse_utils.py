@@ -1,6 +1,6 @@
 # File: test_metasponse_utils.py
 #
-# Copyright (c) 2023-2024 Splunk Inc.
+# Copyright (c) 2023-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,10 +26,12 @@ from metasponse_utils import MetasponseUtils, RetVal
 class TestRetValClass(unittest.TestCase):
     """Class to test the RetVal"""
 
-    @parameterized.expand([
-        ["single_value", [True], (True, None)],
-        ["two_value", [True, {'key': 'value'}], (True, {'key': 'value'})],
-    ])
+    @parameterized.expand(
+        [
+            ["single_value", [True], (True, None)],
+            ["two_value", [True, {"key": "value"}], (True, {"key": "value"})],
+        ]
+    )
     def test_ret_val_pass(self, _, input_val, expected):
         """Tests the valid cases for the ret_val class."""
         output = RetVal(*input_val)
@@ -45,27 +47,31 @@ class TestValidateIntegerMethod(unittest.TestCase):
         self.action_result = ActionResult(dict())
         return super().setUp()
 
-    @parameterized.expand([
-        ["zero_allowed", 0, 0, ""],
-        ["integer", 10, 10.0, ""],
-    ])
+    @parameterized.expand(
+        [
+            ["zero_allowed", 0, 0, ""],
+            ["integer", 10, 10.0, ""],
+        ]
+    )
     def test_validate_integer_pass(self, _, input_value, expected_value, expected_message):
         """Test the valid cases for the validate integer method."""
-        ret_val, output = self.util.validate_integer(self.action_result, input_value, 'delta', True)
+        ret_val, output = self.util.validate_integer(self.action_result, input_value, "delta", True)
 
         self.assertTrue(ret_val)
         self.assertEqual(output, expected_value)
         self.assertEqual(self.action_result.get_message(), expected_message)
 
-    @parameterized.expand([
-        ["zero_not_allowed", "0", "Please provide a non-zero positive integer value in the 'delta' parameter"],
-        ["alphanumeric", "abc12", "Please provide a valid integer value in the 'delta' parameter"],
-        ["unicode", "ト日本標準時ﬗ╬⎋⅍ⅎ€", "Please provide a valid integer value in the 'delta' parameter"],
-        ["float", "10.5", "Please provide a valid integer value in the 'delta' parameter"]
-    ])
+    @parameterized.expand(
+        [
+            ["zero_not_allowed", "0", "Please provide a non-zero positive integer value in the 'delta' parameter"],
+            ["alphanumeric", "abc12", "Please provide a valid integer value in the 'delta' parameter"],
+            ["unicode", "ト日本標準時ﬗ╬⎋⅍ⅎ€", "Please provide a valid integer value in the 'delta' parameter"],
+            ["float", "10.5", "Please provide a valid integer value in the 'delta' parameter"],
+        ]
+    )
     def test_validate_integer_fail(self, _, input_value, expected_message):
         """Test the failed cases for the validate integer method."""
-        ret_val, output = self.util.validate_integer(self.action_result, input_value, 'delta', False)
+        ret_val, output = self.util.validate_integer(self.action_result, input_value, "delta", False)
 
         self.assertFalse(ret_val)
         self.assertIsNone(output)
@@ -83,13 +89,17 @@ class TestGetErrorMessageFromException(unittest.TestCase):
         self.action_result = ActionResult(dict())
         return super().setUp()
 
-    @parameterized.expand([
-        ["exception_without_args", Exception(), "Error message: Error message unavailable. "
-                                                "Please check the asset configuration and|or action parameters"],
-        ["exception_with_single_arg", Exception("test message"), "Error message: test message"],
-        ["exception_with_multiple_args", Exception("test code", "test message"), "Error code: test code. "
-                                                                                 "Error message: test message"]
-    ])
+    @parameterized.expand(
+        [
+            [
+                "exception_without_args",
+                Exception(),
+                "Error message: Error message unavailable. Please check the asset configuration and|or action parameters",
+            ],
+            ["exception_with_single_arg", Exception("test message"), "Error message: test message"],
+            ["exception_with_multiple_args", Exception("test code", "test message"), "Error code: test code. Error message: test message"],
+        ]
+    )
     def test_get_error_message_from_exception(self, _, input_value, expected_message):
         """Test the pass and fail cases of get error message from exception method."""
         error_text = self.util._get_error_message_from_exception(input_value)
@@ -106,10 +116,7 @@ class TestProcessEmptyResponse(unittest.TestCase):
         self.action_result = ActionResult(dict())
         return super().setUp()
 
-    @parameterized.expand([
-        ["success_code", 200, True, {}],
-        ["error_code", 404, False, None]
-    ])
+    @parameterized.expand([["success_code", 200, True, {}], ["error_code", 404, False, None]])
     def test_process_empty_response(self, _, mock_code, expected_status, expected_value):
         """Test the pass and fail cases of process empty response method."""
         self.response.status_code = mock_code
@@ -128,11 +135,13 @@ class TestProcessHtmlResponse(unittest.TestCase):
         self.action_result = ActionResult(dict())
         return super().setUp()
 
-    @parameterized.expand([
-        ["no_response_text", "", False, "Status code: 402, Data from server: Cannot parse error details"],
-        ["normal_response", "Oops!<script>document.getElementById('demo')</script>", False, "Status code: 402, Data from server: Oops!"],
-        ["large_response", "".join([str(i) for i in range(502)]), False, "Error parsing html response"]
-    ])
+    @parameterized.expand(
+        [
+            ["no_response_text", "", False, "Status code: 402, Data from server: Cannot parse error details"],
+            ["normal_response", "Oops!<script>document.getElementById('demo')</script>", False, "Status code: 402, Data from server: Oops!"],
+            ["large_response", "".join([str(i) for i in range(502)]), False, "Error parsing html response"],
+        ]
+    )
     def test_process_html_response(self, _, response_value, expected_value, expected_message):
         """Test the pass and fail cases of process html response method."""
         if response_value:
@@ -167,11 +176,13 @@ class TestProcessJsonResponse(unittest.TestCase):
         self.action_result = ActionResult(dict())
         return super().setUp()
 
-    @parameterized.expand([
-        ["valid_success_json_response", 200, True, {"results": []}, {"results": []}],
-        ["valid_failure_json_response", 404, False, {"status": "NOT_FOUND"}, None],
-        ["invalid_json_response", 404, False, KeyError("Invalid Json"), None],
-    ])
+    @parameterized.expand(
+        [
+            ["valid_success_json_response", 200, True, {"results": []}, {"results": []}],
+            ["valid_failure_json_response", 404, False, {"status": "NOT_FOUND"}, None],
+            ["invalid_json_response", 404, False, KeyError("Invalid Json"), None],
+        ]
+    )
     def test_process_json_response(self, name, mock_code, expected_status, mock_response, expected_value):
         """Test the pass and fail cases of process json response method."""
         self.response.status_code = mock_code
@@ -191,7 +202,7 @@ class TestGeneralCases(unittest.TestCase):
         """Set up method for the tests."""
         connector = Mock()
         connector.error_print.return_value = None
-        connector.config = {'base_url': 'https://<base_url>/'}
+        connector.config = {"base_url": "https://<base_url>/"}
         self.util = MetasponseUtils(connector)
         self.action_result = ActionResult(dict())
         return super().setUp()
@@ -203,18 +214,15 @@ class TestGeneralCases(unittest.TestCase):
         self.assertIsNone(response)
         self.assertEqual(self.action_result.get_message(), "Invalid method: invalid_method")
 
-    @patch('metasponse_utils.requests.get')
+    @patch("metasponse_utils.requests.get")
     def test_make_rest_call_throw_exception(self, mock_get):
         """Test the make_rest_call for error case."""
-        mock_get.side_effect = Exception('error code', 'error message')
+        mock_get.side_effect = Exception("error code", "error message")
 
         ret_val, response = self.util.make_rest_call("/endpoint", self.action_result)
         self.assertFalse(ret_val)
         self.assertIsNone(response)
-        self.assertEqual(
-            self.action_result.get_message(),
-            "Error Connecting to server. Details: ('error code', 'error message')"
-        )
+        self.assertEqual(self.action_result.get_message(), "Error Connecting to server. Details: ('error code', 'error message')")
 
     def test_process_response_unknown_fail(self):
         """Test the _process_response for unknown response."""

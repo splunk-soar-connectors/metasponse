@@ -1,6 +1,6 @@
 # File: test_metasponse_run_job.py
 #
-# Copyright (c) 2023-2024 Splunk Inc.
+# Copyright (c) 2023-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ class RunJobAction(unittest.TestCase):
     """Class to test the Run Job action."""
 
     def setUp(self):
-
         self.connector = MetasponseConnector()
         self.test_json = dict(metasponse_config.TEST_JSON)
         self.test_json.update({"action": "run job", "identifier": "run_job"})
@@ -42,27 +41,22 @@ class RunJobAction(unittest.TestCase):
         Patch the post() to run job.
         """
 
-        self.test_json["parameters"] = [{
-            "builder_id": "xxx-xxxx-xx-xxx-xx",
-            "template": False
-        }]
+        self.test_json["parameters"] = [{"builder_id": "xxx-xxxx-xx-xxx-xx", "template": False}]
 
         mock_post.return_value.status_code = 200
         mock_post.return_value.headers = metasponse_config.DEFAULT_HEADERS
         mock_post.return_value.json.return_value = {}
 
-        req_data = {
-            "template": False
-        }
+        req_data = {"template": False}
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 1)
-        self.assertEqual(ret_val['status'], 'success')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 1)
+        self.assertEqual(ret_val["status"], "success")
 
         mock_post.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.run_job_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.run_job_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
             data=req_data,
@@ -76,30 +70,23 @@ class RunJobAction(unittest.TestCase):
         Patch the post() to run job.
         """
 
-        self.test_json["parameters"] = [{
-            "builder_id": "xxx-xxxx-xx-xxx-xx",
-            "template": False,
-            "delta": 100
-        }]
+        self.test_json["parameters"] = [{"builder_id": "xxx-xxxx-xx-xxx-xx", "template": False, "delta": 100}]
 
         mock_post.return_value.status_code = 200
         mock_post.return_value.headers = metasponse_config.DEFAULT_HEADERS
         mock_post.return_value.json.return_value = {}
 
-        req_data = {
-            "template": False,
-            "delta": 100
-        }
+        req_data = {"template": False, "delta": 100}
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
 
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 1)
-        self.assertEqual(ret_val['status'], 'success')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 1)
+        self.assertEqual(ret_val["status"], "success")
 
         mock_post.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.run_job_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.run_job_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
             data=req_data,
@@ -113,27 +100,22 @@ class RunJobAction(unittest.TestCase):
         Patch the post() to run job.
         """
 
-        self.test_json["parameters"] = [{
-            "builder_id": "xxx-xxxx-xx-xxx-xx",
-            "template": True
-        }]
+        self.test_json["parameters"] = [{"builder_id": "xxx-xxxx-xx-xxx-xx", "template": True}]
 
         mock_post.return_value.status_code = 200
         mock_post.return_value.headers = metasponse_config.DEFAULT_HEADERS
         mock_post.return_value.json.return_value = {}
 
-        req_data = {
-            "template": True
-        }
+        req_data = {"template": True}
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 1)
-        self.assertEqual(ret_val['status'], 'success')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 1)
+        self.assertEqual(ret_val["status"], "success")
 
         mock_post.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.run_job_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.run_job_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
             data=req_data,
@@ -147,14 +129,9 @@ class RunJobAction(unittest.TestCase):
         Patch the post() to run job.
         """
 
-        self.test_json["parameters"] = [{
-            "builder_id": "xxx-xxxx-xx-xxx-xx",
-            "template": False
-        }]
+        self.test_json["parameters"] = [{"builder_id": "xxx-xxxx-xx-xxx-xx", "template": False}]
 
-        req_data = {
-            "template": False
-        }
+        req_data = {"template": False}
 
         mock_post.return_value.status_code = 404
         mock_post.return_value.headers = metasponse_config.DEFAULT_HEADERS
@@ -162,12 +139,12 @@ class RunJobAction(unittest.TestCase):
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 0)
-        self.assertEqual(ret_val['status'], 'failed')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 0)
+        self.assertEqual(ret_val["status"], "failed")
 
         mock_post.assert_called_with(
-            f'{self.test_json["config"]["base_url"]}{self.run_job_endpoint}',
+            f"{self.test_json['config']['base_url']}{self.run_job_endpoint}",
             timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT,
             verify=False,
             data=req_data,
@@ -181,14 +158,10 @@ class RunJobAction(unittest.TestCase):
         Patch the post() to run job.
         """
 
-        self.test_json["parameters"] = [{
-            "builder_id": "xxx-xxxx-xx-xxx-xx",
-            "template": False,
-            "delta": -10
-        }]
+        self.test_json["parameters"] = [{"builder_id": "xxx-xxxx-xx-xxx-xx", "template": False, "delta": -10}]
 
         ret_val = self.connector._handle_action(json.dumps(self.test_json), None)
         ret_val = json.loads(ret_val)
-        self.assertEqual(ret_val['result_summary']['total_objects'], 1)
-        self.assertEqual(ret_val['result_summary']['total_objects_successful'], 0)
-        self.assertEqual(ret_val['status'], 'failed')
+        self.assertEqual(ret_val["result_summary"]["total_objects"], 1)
+        self.assertEqual(ret_val["result_summary"]["total_objects_successful"], 0)
+        self.assertEqual(ret_val["status"], "failed")
