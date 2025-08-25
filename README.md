@@ -1,9 +1,9 @@
 # Metasponse
 
-Publisher: Splunk \
-Connector Version: 1.0.2 \
-Product Vendor: AIS \
-Product Name: Metasponse \
+Publisher: Splunk <br>
+Connector Version: 1.0.2 <br>
+Product Vendor: AIS <br>
+Product Name: Metasponse <br>
 Minimum Product Version: 5.5.0
 
 Connects to Metasponse platform using Metasponse API services
@@ -37,20 +37,20 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration \
-[create job](#action-create-job) - Create a job with provided plugins and options \
-[get all jobs](#action-get-all-jobs) - Get information of all deployed jobs \
-[run job](#action-run-job) - Run or schedule a job using builder id, which is created from create job action \
-[job control](#action-job-control) - Pickup or abort the job that is currently running on the platform \
-[get job status](#action-get-job-status) - Get job status with all job properties \
-[kill job](#action-kill-job) - Delete a job which is configured on platform \
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration <br>
+[create job](#action-create-job) - Create a job with provided plugins and options <br>
+[get all jobs](#action-get-all-jobs) - Get information of all deployed jobs <br>
+[run job](#action-run-job) - Run or schedule a job using builder id, which is created from create job action <br>
+[job control](#action-job-control) - Pickup or abort the job that is currently running on the platform <br>
+[get job status](#action-get-job-status) - Get job status with all job properties <br>
+[kill job](#action-kill-job) - Delete a job which is configured on platform <br>
 [list plugins](#action-list-plugins) - Get information about all plugins
 
 ## action: 'test connectivity'
 
 Validate the asset configuration for connectivity using supplied configuration
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -65,7 +65,7 @@ No Output
 
 Create a job with provided plugins and options
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 For job options, use the following format in "job_options" parameter<br>{ "ssh.user":"testuser", "ssh.password":"testpass", "job.rhost":"8.8.8.8" }.
@@ -99,7 +99,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get information of all deployed jobs
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -238,7 +238,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Run or schedule a job using builder id, which is created from create job action
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -267,7 +267,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Pickup or abort the job that is currently running on the platform
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -294,7 +294,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get job status with all job properties
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -420,7 +420,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Delete a job which is configured on platform
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -445,7 +445,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get information about all plugins
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
