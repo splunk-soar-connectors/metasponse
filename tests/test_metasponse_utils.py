@@ -31,7 +31,7 @@ class TestRetValClass(unittest.TestCase):
             ("single_value", [True], (True, None)),
             ("two_value", [True, {"key": "value"}], (True, {"key": "value"})),
         ]
-        
+
         for case_name, input_val, expected in test_cases:
             with self.subTest(case=case_name):
                 output = RetVal(*input_val)
@@ -53,7 +53,7 @@ class TestValidateIntegerMethod(unittest.TestCase):
             ("zero_allowed", 0, 0, ""),
             ("integer", 10, 10.0, ""),
         ]
-        
+
         for case_name, input_value, expected_value, expected_message in test_cases:
             with self.subTest(case=case_name):
                 ret_val, output = self.util.validate_integer(self.action_result, input_value, "delta", True)
@@ -69,7 +69,7 @@ class TestValidateIntegerMethod(unittest.TestCase):
             ("unicode", "ト日本標準時ﬗ╬⎋⅍ⅎ€", "Please provide a valid integer value in the 'delta' parameter"),
             ("float", "10.5", "Please provide a valid integer value in the 'delta' parameter"),
         ]
-        
+
         for case_name, input_value, expected_message in test_cases:
             with self.subTest(case=case_name):
                 ret_val, output = self.util.validate_integer(self.action_result, input_value, "delta", False)
@@ -100,7 +100,7 @@ class TestGetErrorMessageFromException(unittest.TestCase):
             ("exception_with_single_arg", Exception("test message"), "Error message: test message"),
             ("exception_with_multiple_args", Exception("test code", "test message"), "Error code: test code. Error message: test message"),
         ]
-        
+
         for case_name, input_value, expected_message in test_cases:
             with self.subTest(case=case_name):
                 error_text = self.util._get_error_message_from_exception(input_value)
@@ -119,11 +119,8 @@ class TestProcessEmptyResponse(unittest.TestCase):
 
     def test_process_empty_response(self):
         """Test the pass and fail cases of process empty response method."""
-        test_cases = [
-            ("success_code", 200, True, {}), 
-            ("error_code", 404, False, None)
-        ]
-        
+        test_cases = [("success_code", 200, True, {}), ("error_code", 404, False, None)]
+
         for case_name, mock_code, expected_status, expected_value in test_cases:
             with self.subTest(case=case_name):
                 self.response.status_code = mock_code
@@ -149,7 +146,7 @@ class TestProcessHtmlResponse(unittest.TestCase):
             ("normal_response", "Oops!<script>document.getElementById('demo')</script>", False, "Status code: 402, Data from server: Oops!"),
             ("large_response", "".join([str(i) for i in range(502)]), False, "Error parsing html response"),
         ]
-        
+
         for case_name, response_value, expected_value, expected_message in test_cases:
             with self.subTest(case=case_name):
                 if response_value:
@@ -191,7 +188,7 @@ class TestProcessJsonResponse(unittest.TestCase):
             ("valid_failure_json_response", 404, False, {"status": "NOT_FOUND"}, None),
             ("invalid_json_response", 404, False, KeyError("Invalid Json"), None),
         ]
-        
+
         for case_name, mock_code, expected_status, mock_response, expected_value in test_cases:
             with self.subTest(case=case_name):
                 self.response.status_code = mock_code
