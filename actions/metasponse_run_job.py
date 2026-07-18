@@ -14,6 +14,7 @@
 # and limitations under the License.
 
 import phantom.app as phantom
+from urllib.parse import quote
 
 import metasponse_consts as consts
 from actions import BaseAction
@@ -25,7 +26,7 @@ class RunJob(BaseAction):
     def execute(self):
         """Execute run job action."""
 
-        builder_id = self._param["builder_id"]
+        builder_id = quote(str(self._param["builder_id"]), safe="")
         delta = self._param.get("delta")
         template = self._param.get("template", False)
         body = {"template": template}

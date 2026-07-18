@@ -14,6 +14,7 @@
 # and limitations under the License.
 
 import phantom.app as phantom
+from urllib.parse import quote
 
 import metasponse_consts as consts
 from actions import BaseAction
@@ -25,7 +26,7 @@ class JobStatus(BaseAction):
     def execute(self):
         """Execute get job status action."""
 
-        job_name = self._param["job_name"]
+        job_name = quote(str(self._param["job_name"]), safe="")
         params = {"allow_stale": True}
 
         endpoint = consts.METASPONSE_PICK_UP_JOB_GET_JOB_STATUS.format(job_name=job_name)

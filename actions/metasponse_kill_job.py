@@ -14,6 +14,7 @@
 # and limitations under the License.
 
 import phantom.app as phantom
+from urllib.parse import quote
 
 import metasponse_consts as consts
 from actions import BaseAction
@@ -25,7 +26,7 @@ class KillJob(BaseAction):
     def execute(self):
         """Execute kill job action."""
 
-        job_name = self._param["job_name"]
+        job_name = quote(str(self._param["job_name"]), safe="")
 
         endpoint = consts.METASPONSE_KILL_JOB.format(job_name=job_name)
 
