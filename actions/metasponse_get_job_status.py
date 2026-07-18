@@ -1,6 +1,6 @@
 # File: metasponse_get_job_status.py
 #
-# Copyright (c) 2023-2025 Splunk Inc.
+# Copyright (c) 2023-2026 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,8 +13,9 @@
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
 
-import phantom.app as phantom
 from urllib.parse import quote
+
+import phantom.app as phantom
 
 import metasponse_consts as consts
 from actions import BaseAction
