@@ -130,6 +130,11 @@ class MetasponseUtils:
 
         # Please specify the status codes here
         if 200 <= r.status_code < 399:
+            if isinstance(resp_json, dict):
+                api_error = resp_json.get("error") or resp_json.get("validation_errors")
+                if api_error:
+                    action_result.add_data(resp_json)
+                    return RetVal(action_result.set_status(phantom.APP_ERROR, f"Error from server: {api_error}"), None)
             return RetVal(phantom.APP_SUCCESS, resp_json)
 
         # You should process the error returned in the json
