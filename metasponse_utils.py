@@ -186,7 +186,7 @@ class MetasponseUtils:
 
         try:
             r = request_func(
-                url, timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT, verify=self._connector.config.get("verify_server_cert", False), **kwargs
+                url, timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT, verify=self._connector.config.get("verify_server_cert", True), **kwargs
             )
         except Exception as e:
             return RetVal(action_result.set_status(phantom.APP_ERROR, f"Error Connecting to server. Details: {e!s}"), resp_json)
