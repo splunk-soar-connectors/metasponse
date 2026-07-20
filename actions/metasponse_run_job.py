@@ -1,6 +1,6 @@
 # File: metasponse_run_job.py
 #
-# Copyright (c) 2023-2025 Splunk Inc.
+# Copyright (c) 2023-2026 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,6 +12,8 @@
 # the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
+
+from urllib.parse import quote
 
 import phantom.app as phantom
 
@@ -25,7 +27,7 @@ class RunJob(BaseAction):
     def execute(self):
         """Execute run job action."""
 
-        builder_id = self._param["builder_id"]
+        builder_id = quote(str(self._param["builder_id"]), safe="")
         delta = self._param.get("delta")
         template = self._param.get("template", False)
         body = {"template": template}

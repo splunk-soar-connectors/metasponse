@@ -10,7 +10,7 @@
     "python_version": "3.9, 3.13",
     "product_version_regex": ".*",
     "publisher": "Splunk",
-    "license": "Copyright (c) 2023-2025 Splunk Inc.",
+    "license": "Copyright (c) 2023-2026 Splunk Inc.",
     "app_version": "1.0.3",
     "utctime_updated": "2025-09-05T19:08:07.035175Z",
     "package_name": "phantom_metasponse",
@@ -31,6 +31,7 @@
         "verify_server_cert": {
             "description": "Verify server certificate",
             "data_type": "boolean",
+            "default": true,
             "order": 1
         }
     },

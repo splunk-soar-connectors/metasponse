@@ -1,6 +1,6 @@
 # File: metasponse_utils.py
 #
-# Copyright (c) 2023-2025 Splunk Inc.
+# Copyright (c) 2023-2026 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -130,6 +130,11 @@ class MetasponseUtils:
 
         # Please specify the status codes here
         if 200 <= r.status_code < 399:
+            if isinstance(resp_json, dict):
+                api_error = resp_json.get("error") or resp_json.get("validation_errors")
+                if api_error:
+                    action_result.add_data(resp_json)
+                    return RetVal(action_result.set_status(phantom.APP_ERROR, f"Error from server: {api_error}"), None)
             return RetVal(phantom.APP_SUCCESS, resp_json)
 
         # You should process the error returned in the json
@@ -181,7 +186,7 @@ class MetasponseUtils:
 
         try:
             r = request_func(
-                url, timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT, verify=self._connector.config.get("verify_server_cert", False), **kwargs
+                url, timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT, verify=self._connector.config.get("verify_server_cert", True), **kwargs
             )
         except Exception as e:
             return RetVal(action_result.set_status(phantom.APP_ERROR, f"Error Connecting to server. Details: {e!s}"), resp_json)
