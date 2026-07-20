@@ -1,7 +1,7 @@
 # Metasponse
 
 Publisher: Splunk <br>
-Connector Version: 1.0.3 <br>
+Connector Version: 1.0.4 <br>
 Product Vendor: AIS <br>
 Product Name: Metasponse <br>
 Minimum Product Version: 5.5.0
