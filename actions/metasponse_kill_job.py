@@ -13,8 +13,6 @@
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
 
-from urllib.parse import quote
-
 import phantom.app as phantom
 
 import metasponse_consts as consts
@@ -27,7 +25,9 @@ class KillJob(BaseAction):
     def execute(self):
         """Execute kill job action."""
 
-        job_name = quote(str(self._param["job_name"]), safe="")
+        ret_val, job_name = self._connector.util.validate_path_segment(self._action_result, self._param["job_name"], "job_name")
+        if phantom.is_fail(ret_val):
+            return self._action_result.get_status()
 
         endpoint = consts.METASPONSE_KILL_JOB.format(job_name=job_name)
 

@@ -135,3 +135,12 @@ class JobControlAction(unittest.TestCase):
             data={"action": "pickup"},
             headers={},
         )
+
+    def test_job_control_rejects_dot_segments(self, mock_post):
+        for job_name in (".", ".."):
+            with self.subTest(job_name=job_name):
+                self.test_json["parameters"] = [{"job_name": job_name, "action": "pickup"}]
+                ret_val = json.loads(self.connector._handle_action(json.dumps(self.test_json), None))
+                self.assertEqual(ret_val["status"], "failed")
+
+        mock_post.assert_not_called()

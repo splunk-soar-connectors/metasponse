@@ -14,6 +14,7 @@
 # and limitations under the License.
 
 import json
+from urllib.parse import quote
 
 import phantom.app as phantom
 import requests
@@ -58,6 +59,14 @@ class MetasponseUtils:
             return action_result.set_status(phantom.APP_ERROR, consts.METASPONSE_ERROR_ZERO_INT_PARAM.format(key=key)), None
 
         return phantom.APP_SUCCESS, parameter
+
+    def validate_path_segment(self, action_result, parameter, key):
+        """Reject traversal-only identifiers and encode accepted path segments."""
+        parameter = str(parameter)
+        if parameter in {".", ".."}:
+            return action_result.set_status(phantom.APP_ERROR, consts.METASPONSE_ERROR_INVALID_ACTION_PARAM.format(key=key)), None
+
+        return phantom.APP_SUCCESS, quote(parameter, safe="")
 
     def _get_error_message_from_exception(self, e):
         """Get an appropriate error message from the exception.

@@ -81,3 +81,12 @@ class GetJobStatusAction(unittest.TestCase):
         mock_delete.assert_called_with(
             f"{self.test_json['config']['base_url']}{endpoint}", timeout=consts.METASPONSE_REQUEST_DEFAULT_TIMEOUT, verify=False, headers={}
         )
+
+    def test_kill_job_rejects_dot_segments(self, mock_delete):
+        for job_name in (".", ".."):
+            with self.subTest(job_name=job_name):
+                self.test_json["parameters"] = [{"job_name": job_name}]
+                ret_val = json.loads(self.connector._handle_action(json.dumps(self.test_json), None))
+                self.assertEqual(ret_val["status"], "failed")
+
+        mock_delete.assert_not_called()
