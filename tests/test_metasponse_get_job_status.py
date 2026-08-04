@@ -90,3 +90,12 @@ class GetJobStatusAction(unittest.TestCase):
             params={"allow_stale": True},
             headers={},
         )
+
+    def test_get_job_status_rejects_dot_segments(self, mock_get):
+        for job_name in (".", ".."):
+            with self.subTest(job_name=job_name):
+                self.test_json["parameters"] = [{"job_name": job_name}]
+                ret_val = json.loads(self.connector._handle_action(json.dumps(self.test_json), None))
+                self.assertEqual(ret_val["status"], "failed")
+
+        mock_get.assert_not_called()

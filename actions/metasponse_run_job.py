@@ -13,8 +13,6 @@
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
 
-from urllib.parse import quote
-
 import phantom.app as phantom
 
 import metasponse_consts as consts
@@ -27,7 +25,10 @@ class RunJob(BaseAction):
     def execute(self):
         """Execute run job action."""
 
-        builder_id = quote(str(self._param["builder_id"]), safe="")
+        ret_val, builder_id = self._connector.util.validate_path_segment(self._action_result, self._param["builder_id"], "builder_id")
+        if phantom.is_fail(ret_val):
+            return self._action_result.get_status()
+
         delta = self._param.get("delta")
         template = self._param.get("template", False)
         body = {"template": template}

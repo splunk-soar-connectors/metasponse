@@ -63,6 +63,15 @@ class RunJobAction(unittest.TestCase):
             headers={},
         )
 
+    def test_run_job_rejects_dot_segments(self, mock_post):
+        for builder_id in (".", ".."):
+            with self.subTest(builder_id=builder_id):
+                self.test_json["parameters"] = [{"builder_id": builder_id, "template": False}]
+                ret_val = json.loads(self.connector._handle_action(json.dumps(self.test_json), None))
+                self.assertEqual(ret_val["status"], "failed")
+
+        mock_post.assert_not_called()
+
     def test_run_job_with_delta_valid(self, mock_post):
         """
         Test the valid case for the run job action.
