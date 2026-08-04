@@ -1,3 +1,1 @@
 **Unreleased**
-
-* Reject exact dot-segment job and builder identifiers before constructing API endpoints.
